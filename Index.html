@@ -1,9 +1,11 @@
 <!DOCTYPE html>
-<html>
+<html lang="es">
 <head>
-  <base target="_top">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta charset="UTF-8" />
+  <title>Coto Melía</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
   <style>
     body { background:#eef1f3; padding:20px; }
     .card-box {
@@ -22,8 +24,21 @@
       justify-content:space-between;
       align-items:center;
     }
-    .section-title { margin-top:25px; font-weight:600; }
-    .small-note { font-size:.85rem; color:#555; }
+    .pet-img {
+      width:48px;
+      height:48px;
+      border-radius:50%;
+      object-fit:cover;
+    }
+    .badge-soft {
+      background:#eef3ff;
+      color:#2b4db8;
+      border-radius:999px;
+      padding:2px 10px;
+      font-size:.75rem;
+    }
+    .text-muted-small { color:#6c757d; font-size:.85rem; }
+    .divider { border-top:1px dashed #e2e6ea; margin:12px 0; }
   </style>
 </head>
 
@@ -33,8 +48,8 @@
 <!-- LOGIN -->
 <div id="stepLogin">
   <div class="titulo mb-3">🏘️ Administración Coto Melía</div>
-  <input id="numero" class="form-control mb-2" placeholder="WhatsApp +52...">
-  <button class="btn btn-primary w-100" onclick="doLogin()">Entrar</button>
+  <input id="numero" class="form-control mb-2" placeholder="WhatsApp (solo números)">
+  <button class="btn btn-primary w-100" onclick="login()">Entrar</button>
 </div>
 
 <!-- HOME -->
@@ -42,154 +57,274 @@
 
   <div class="titulo mb-3">
     <span>🏠 Home</span>
-    <a href="#" onclick="goHome()">🔄 Home</a>
+    <button class="btn btn-sm btn-outline-secondary" onclick="loadHome()">🔄</button>
   </div>
 
   <div id="homeInfo" class="mb-3"></div>
 
   <!-- RECIBO -->
-  <div class="section-title">💡 Recibo de luz</div>
-  <div id="reciboEstado" class="small-note mb-2"></div>
-
-  <div id="boxRecibo">
-    <input type="file" id="rz_arch" class="form-control mb-2">
-    <button id="btnRecibo" class="btn btn-success w-100" onclick="subirRecibo()">Subir recibo</button>
+  <div class="mb-3">
+    <b>💡 Recibo de luz</b><br>
+    <span id="reciboEstado"></span>
   </div>
 
   <!-- MASCOTAS -->
-  <div class="section-title">🐾 Mascotas</div>
-  <div id="listaMascotas" class="small-note mb-2"></div>
-  <button class="btn btn-outline-secondary btn-sm" onclick="toggleMascota()">+ Agregar mascota</button>
-
-  <div id="formMascota" class="hidden mt-2">
-    <input id="m_nombre" class="form-control mb-2" placeholder="Nombre">
-    <input id="m_especie" class="form-control mb-2" placeholder="Raza">
-    <input id="m_foto" type="file" class="form-control mb-2">
-    <button class="btn btn-success w-100" onclick="guardarMascota()">Guardar mascota</button>
+  <div class="mb-3">
+    <b>🐾 Mascotas</b>
+    <div id="listaMascotas" class="mt-2"></div>
   </div>
 
   <!-- PAGOS -->
-  <div class="section-title">💰 Registrar pago</div>
+  <div class="mb-3">
+    <b>💰 Registrar pago</b>
 
-  <select id="p_tipo" class="form-select mb-2">
-    <option value="CUOTA">Cuota mensual ($150)</option>
-    <option value="PORTON">Portón</option>
-    <option value="OTRO">Otro</option>
-  </select>
+    <select id="p_tipo" class="form-select mt-2">
+      <option value="CUOTA">Cuota mensual ($150)</option>
+      <option value="PORTON">Portón</option>
+      <option value="OTRO">Otro</option>
+    </select>
 
-  <input id="p_monto" class="form-control mb-2" value="150">
-  <input id="p_arch" type="file" class="form-control mb-2">
+    <input id="p_monto" class="form-control mt-2" value="150">
+    <input id="p_arch" type="file" class="form-control mt-2" accept=".jpg,.jpeg,.png,.pdf">
 
-  <button id="btnPago" class="btn btn-primary w-100" onclick="enviarPago()">Enviar pago</button>
+    <button id="btnPago" class="btn btn-primary w-100 mt-2" onclick="enviarPago()">
+      Enviar pago
+    </button>
+    <div class="text-muted-small mt-1">Máximo 5MB • JPG/PNG/PDF</div>
+  </div>
+
+  <!-- ÚLTIMO PAGO -->
+  <div class="mb-3">
+    <b>🧾 Último pago</b>
+    <div id="ultimoPago" class="mt-2 text-muted-small">Cargando...</div>
+  </div>
+
+  <!-- HISTORIAL DE PAGOS -->
+  <div class="mb-3">
+    <b>📚 Historial básico</b>
+    <div id="historialPagos" class="mt-2 text-muted-small">Cargando...</div>
+  </div>
 
   <!-- FOLIO -->
-  <div id="folioBox" class="alert alert-info hidden mt-3">
+  <div id="folioBox" class="alert alert-info hidden">
     <div id="folioText"></div>
-    <button class="btn btn-outline-primary w-100 mt-2" onclick="goHome()">Aceptar</button>
+    <button class="btn btn-outline-primary w-100 mt-2" onclick="aceptarFolio()">
+      Aceptar
+    </button>
   </div>
 
 </div>
 </div>
 
-<script>
-let SESSION={ whatsapp:"", idUnico:"" };
+<script type="module">
+import { supabase } from "./supabase.js";
 
-function show(id){document.getElementById(id).classList.remove("hidden")}
-function hide(id){document.getElementById(id).classList.add("hidden")}
+const SESSION = { casa:null };
+const MAX_FILE_MB = 5;
+const ACCEPTED_RECEIPTS = ["image/jpeg", "image/png", "application/pdf"];
 
-function doLogin(){
-  SESSION.whatsapp=document.getElementById("numero").value;
-  google.script.run.withSuccessHandler(r=>{
-    SESSION.idUnico=r.casas[0];
-    hide("stepLogin");
-    loadHome();
-  }).login({whatsappE164:SESSION.whatsapp});
+function show(id){ document.getElementById(id).classList.remove("hidden") }
+function hide(id){ document.getElementById(id).classList.add("hidden") }
+function formatMoney(value){
+  return new Intl.NumberFormat("es-MX", { style:"currency", currency:"MXN" }).format(value || 0);
+}
+function formatDate(value){
+  if(!value) return "—";
+  const d = new Date(value);
+  return Number.isNaN(d.getTime()) ? "—" : d.toLocaleString("es-MX");
+}
+function setPagoLoading(isLoading){
+  btnPago.disabled = isLoading;
+  p_tipo.disabled = isLoading;
+  p_monto.disabled = isLoading;
+  p_arch.disabled = isLoading;
+  btnPago.innerText = isLoading ? "Enviando..." : "Enviar pago";
+}
+function validateFile(file){
+  if(!file) return "Selecciona un comprobante";
+  if(!ACCEPTED_RECEIPTS.includes(file.type)) return "Formato no permitido (usa JPG, PNG o PDF)";
+  const maxBytes = MAX_FILE_MB * 1024 * 1024;
+  if(file.size > maxBytes) return `Archivo muy grande (máx ${MAX_FILE_MB}MB)`;
+  return "";
 }
 
-function goHome(){
-  hide("folioBox");
-  btnPago.disabled=false;
-  btnRecibo && (btnRecibo.disabled=false);
+/* LOGIN */
+async function login(){
+  const whatsapp = document.getElementById("numero").value;
+
+  const { data, error } = await supabase
+    .from("casas")
+    .select("*")
+    .eq("whatsapp", whatsapp)
+    .single();
+
+  if(error){
+    alert("Casa no encontrada");
+    return;
+  }
+
+  SESSION.casa = data;
+  hide("stepLogin");
   loadHome();
 }
 
-function loadHome(){
+/* HOME */
+async function loadHome(){
   show("stepHome");
-  google.script.run.withSuccessHandler(info=>{
-    homeInfo.innerHTML=`
-      <b>Casa:</b> ${info.idUnico}<br>
-      <b>Estatus expediente:</b> ${info.estatusExpediente}
-    `;
-    if(info.tieneRecibo){
-      reciboEstado.innerHTML="✅ Recibo cargado correctamente";
-      hide("boxRecibo");
-    } else {
-      reciboEstado.innerHTML="❌ Recibo pendiente";
-      show("boxRecibo");
-    }
-  }).getInfoCasa(SESSION.idUnico);
+  hide("folioBox");
 
-  google.script.run.withSuccessHandler(renderMascotas)
-    .getMascotasCasa(SESSION.idUnico);
+  const { data: casa, error } = await supabase
+    .from("casas")
+    .select("*")
+    .eq("id_unico", SESSION.casa.id_unico)
+    .single();
+
+  if(error){
+    alert("Error al cargar la casa");
+    return;
+  }
+
+  SESSION.casa = casa;
+
+  homeInfo.innerHTML = `
+    <b>ID Casa:</b> ${casa.id_unico}<br>
+    <b>WhatsApp:</b> ${casa.whatsapp}
+  `;
+
+  reciboEstado.innerHTML = casa.tiene_recibo
+    ? "✅ Recibo de luz completado"
+    : "❌ Recibo pendiente";
+
+  // Mascotas
+  const { data: mascotas } = await supabase
+    .from("mascotas")
+    .select("*")
+    .eq("id_casa", casa.id_unico);
+
+  renderMascotas(mascotas || []);
+
+  await cargarPagos();
 }
 
-function subirRecibo(){
-  const f=rz_arch.files[0];
-  if(!f) return;
-  btnRecibo.disabled=true;
-  const r=new FileReader();
-  r.onload=()=>google.script.run.withSuccessHandler(()=>goHome())
-    .subirReciboLuz({
-      idUnico:SESSION.idUnico,
-      archivo:{name:f.name,base64:r.result.split(",")[1],mimeType:f.type}
-    });
-  r.readAsDataURL(f);
+/* PAGOS: ÚLTIMO + HISTORIAL */
+async function cargarPagos(){
+  const { data: pagos, error } = await supabase
+    .from("pagos")
+    .select("folio, concepto, monto, created_at, estatus")
+    .eq("id_casa", SESSION.casa.id_unico)
+    .order("created_at", { ascending: false })
+    .limit(5);
+
+  if(error){
+    ultimoPago.innerHTML = "No se pudo cargar.";
+    historialPagos.innerHTML = "No se pudo cargar.";
+    return;
+  }
+
+  const ultimo = pagos?.[0];
+  ultimoPago.innerHTML = ultimo
+    ? `
+      <div class="d-flex align-items-center gap-2 flex-wrap">
+        <span class="badge-soft">${ultimo.concepto || "Pago"}</span>
+        <span>${formatMoney(ultimo.monto)}</span>
+        <span class="text-muted-small">${formatDate(ultimo.created_at)}</span>
+        ${ultimo.estatus ? `<span class="text-muted-small">• ${ultimo.estatus}</span>` : ""}
+      </div>
+      <div class="text-muted-small">Folio: ${ultimo.folio || "—"}</div>
+    `
+    : "<i>Sin pagos registrados</i>";
+
+  historialPagos.innerHTML = pagos?.length
+    ? pagos.map(p => `
+        <div class="d-flex justify-content-between">
+          <span>${p.concepto || "Pago"} • ${formatDate(p.created_at)}</span>
+          <span>${formatMoney(p.monto)}</span>
+        </div>
+      `).join("<div class='divider'></div>")
+    : "<i>Sin pagos registrados</i>";
 }
 
-function toggleMascota(){formMascota.classList.toggle("hidden")}
-
-function guardarMascota(){
-  const f=m_foto.files[0];
-  const r=new FileReader();
-  r.onload=()=>google.script.run.withSuccessHandler(()=>goHome())
-    .agregarMascota({
-      idUnico:SESSION.idUnico,
-      nombre:m_nombre.value,
-      especie:m_especie.value,
-      foto:{name:f.name,base64:r.result.split(",")[1],mimeType:f.type}
-    });
-  r.readAsDataURL(f);
-}
-
+/* MASCOTAS */
 function renderMascotas(list){
-  listaMascotas.innerHTML=list.length
-    ? list.map(m=>`• ${m.nombre} (${m.especie})`).join("<br>")
-    : "Sin mascotas registradas.";
+  listaMascotas.innerHTML = list.length
+    ? list.map(m => `
+      <div class="d-flex align-items-center gap-2 mb-2">
+        <img src="${m.foto_url}" class="pet-img" alt="${m.nombre}">
+        <span>${m.nombre} – ${m.especie}</span>
+      </div>
+    `).join("")
+    : "<i>Sin mascotas registradas</i>";
 }
 
-function enviarPago(){
-  const f=p_arch.files[0];
-  if(!f) return;
-  btnPago.disabled=true;
-  const r=new FileReader();
-  r.onload=()=>google.script.run.withSuccessHandler(res=>{
-    if(!res.ok){
-      alert(res.motivo||"Pago no permitido");
-      btnPago.disabled=false;
-      return;
-    }
-    folioText.innerHTML=`<b>Pago recibido</b><br>Folio: <b>${res.folio}</b><br>Toma screenshot.`;
-    show("folioBox");
-  }).registrarPago({
-    idUnico:SESSION.idUnico,
-    whatsappE164:SESSION.whatsapp,
-    concepto:p_tipo.value,
-    monto:Number(p_monto.value),
-    comprobante:{name:f.name,base64:r.result.split(",")[1],mimeType:f.type}
-  });
-  r.readAsDataURL(f);
+/* PAGOS */
+async function enviarPago(){
+  const tipo = p_tipo.value;
+  const monto = Number(p_monto.value);
+  const file = p_arch.files[0];
+  const fileError = validateFile(file);
+  if(fileError) return alert(fileError);
+  if(!monto || monto <= 0) return alert("Monto inválido");
+
+  setPagoLoading(true);
+
+  // Subir archivo
+  const now = new Date();
+  const year = now.getFullYear();
+  const month = String(now.getMonth() + 1).padStart(2, "0");
+  const sanitizedName = file.name.replace(/\s+/g, "_");
+  const path = `pagos/${SESSION.casa.id_unico}/${year}/${month}/${Date.now()}-${sanitizedName}`;
+  const { error: uploadError } = await supabase
+    .storage.from("subidas")
+    .upload(path, file);
+
+  if(uploadError){
+    alert("Error al subir archivo");
+    setPagoLoading(false);
+    return;
+  }
+
+  const { data: urlData } = supabase
+    .storage.from("subidas")
+    .getPublicUrl(path);
+
+  // Registrar pago
+  const { data, error } = await supabase
+    .from("pagos")
+    .insert({
+      id_casa: SESSION.casa.id_unico,
+      concepto: tipo,
+      monto,
+      comprobante_url: urlData.publicUrl
+    })
+    .select()
+    .single();
+
+  if(error){
+    alert("Error al registrar pago");
+    setPagoLoading(false);
+    return;
+  }
+
+  folioText.innerHTML = `
+    <b>Pago recibido</b><br>
+    Folio: <b>${data.folio}</b><br>
+    Guarda este comprobante
+  `;
+  show("folioBox");
 }
+
+/* VOLVER A HOME */
+function aceptarFolio(){
+  setPagoLoading(false);
+  p_arch.value = "";
+  p_monto.value = "150";
+  loadHome();
+}
+
+window.login = login;
+window.enviarPago = enviarPago;
+window.aceptarFolio = aceptarFolio;
+window.loadHome = loadHome;
 </script>
-
 </body>
 </html>
