@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <base target="_top">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    body { background:#eef1f3; padding:20px; }
+    .card-box {
+      background:#fff;
+      border-radius:12px;
+      padding:20px;
+      max-width:720px;
+      margin:auto;
+      box-shadow:0 2px 12px rgba(0,0,0,.1);
+    }
+    .hidden { display:none; }
+    .titulo {
+      font-size:1.3rem;
+      font-weight:600;
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+    }
+    .section-title { margin-top:25px; font-weight:600; }
+    .small-note { font-size:.85rem; color:#555; }
+  </style>
+</head>
+
+<body>
+<div class="card-box">
+
+<!-- LOGIN -->
+<div id="stepLogin">
+  <div class="titulo mb-3">🏘️ Administración Coto Melía</div>
+  <input id="numero" class="form-control mb-2" placeholder="WhatsApp +52...">
+  <button class="btn btn-primary w-100" onclick="doLogin()">Entrar</button>
+</div>
+
+<!-- HOME -->
+<div id="stepHome" class="hidden">
+
+  <div class="titulo mb-3">
+    <span>🏠 Home</span>
+    <a href="#" onclick="goHome()">🔄 Home</a>
+  </div>
+
+  <div id="homeInfo" class="mb-3"></div>
+
+  <!-- RECIBO -->
+  <div class="section-title">💡 Recibo de luz</div>
+  <div id="reciboEstado" class="small-note mb-2"></div>
+
+  <div id="boxRecibo">
+    <input type="file" id="rz_arch" class="form-control mb-2">
+    <button id="btnRecibo" class="btn btn-success w-100" onclick="subirRecibo()">Subir recibo</button>
+  </div>
+
+  <!-- MASCOTAS -->
+  <div class="section-title">🐾 Mascotas</div>
+  <div id="listaMascotas" class="small-note mb-2"></div>
+  <button class="btn btn-outline-secondary btn-sm" onclick="toggleMascota()">+ Agregar mascota</button>
+
+  <div id="formMascota" class="hidden mt-2">
+    <input id="m_nombre" class="form-control mb-2" placeholder="Nombre">
+    <input id="m_especie" class="form-control mb-2" placeholder="Raza">
+    <input id="m_foto" type="file" class="form-control mb-2">
+    <button class="btn btn-success w-100" onclick="guardarMascota()">Guardar mascota</button>
+  </div>
+
+  <!-- PAGOS -->
+  <div class="section-title">💰 Registrar pago</div>
+
+  <select id="p_tipo" class="form-select mb-2">
+    <option value="CUOTA">Cuota mensual ($150)</option>
+    <option value="PORTON">Portón</option>
+    <option value="OTRO">Otro</option>
+  </select>
+
+  <input id="p_monto" class="form-control mb-2" value="150">
+  <input id="p_arch" type="file" class="form-control mb-2">
+
+  <button id="btnPago" class="btn btn-primary w-100" onclick="enviarPago()">Enviar pago</button>
+
+  <!-- FOLIO -->
+  <div id="folioBox" class="alert alert-info hidden mt-3">
+    <div id="folioText"></div>
+    <button class="btn btn-outline-primary w-100 mt-2" onclick="goHome()">Aceptar</button>
+  </div>
+
+</div>
+</div>
+
+<script>
+let SESSION={ whatsapp:"", idUnico:"" };
+
+function show(id){document.getElementById(id).classList.remove("hidden")}
+function hide(id){document.getElementById(id).classList.add("hidden")}
+
+function doLogin(){
+  SESSION.whatsapp=document.getElementById("numero").value;
+  google.script.run.withSuccessHandler(r=>{
+    SESSION.idUnico=r.casas[0];
+    hide("stepLogin");
+    loadHome();
+  }).login({whatsappE164:SESSION.whatsapp});
+}
+
+function goHome(){
+  hide("folioBox");
+  btnPago.disabled=false;
+  btnRecibo && (btnRecibo.disabled=false);
+  loadHome();
+}
+
+function loadHome(){
+  show("stepHome");
+  google.script.run.withSuccessHandler(info=>{
+    homeInfo.innerHTML=`
+      <b>Casa:</b> ${info.idUnico}<br>
+      <b>Estatus expediente:</b> ${info.estatusExpediente}
+    `;
+    if(info.tieneRecibo){
+      reciboEstado.innerHTML="✅ Recibo cargado correctamente";
+      hide("boxRecibo");
+    } else {
+      reciboEstado.innerHTML="❌ Recibo pendiente";
+      show("boxRecibo");
+    }
+  }).getInfoCasa(SESSION.idUnico);
+
+  google.script.run.withSuccessHandler(renderMascotas)
+    .getMascotasCasa(SESSION.idUnico);
+}
+
+function subirRecibo(){
+  const f=rz_arch.files[0];
+  if(!f) return;
+  btnRecibo.disabled=true;
+  const r=new FileReader();
+  r.onload=()=>google.script.run.withSuccessHandler(()=>goHome())
+    .subirReciboLuz({
+      idUnico:SESSION.idUnico,
+      archivo:{name:f.name,base64:r.result.split(",")[1],mimeType:f.type}
+    });
+  r.readAsDataURL(f);
+}
+
+function toggleMascota(){formMascota.classList.toggle("hidden")}
+
+function guardarMascota(){
+  const f=m_foto.files[0];
+  const r=new FileReader();
+  r.onload=()=>google.script.run.withSuccessHandler(()=>goHome())
+    .agregarMascota({
+      idUnico:SESSION.idUnico,
+      nombre:m_nombre.value,
+      especie:m_especie.value,
+      foto:{name:f.name,base64:r.result.split(",")[1],mimeType:f.type}
+    });
+  r.readAsDataURL(f);
+}
+
+function renderMascotas(list){
+  listaMascotas.innerHTML=list.length
+    ? list.map(m=>`• ${m.nombre} (${m.especie})`).join("<br>")
+    : "Sin mascotas registradas.";
+}
+
+function enviarPago(){
+  const f=p_arch.files[0];
+  if(!f) return;
+  btnPago.disabled=true;
+  const r=new FileReader();
+  r.onload=()=>google.script.run.withSuccessHandler(res=>{
+    if(!res.ok){
+      alert(res.motivo||"Pago no permitido");
+      btnPago.disabled=false;
+      return;
+    }
+    folioText.innerHTML=`<b>Pago recibido</b><br>Folio: <b>${res.folio}</b><br>Toma screenshot.`;
+    show("folioBox");
+  }).registrarPago({
+    idUnico:SESSION.idUnico,
+    whatsappE164:SESSION.whatsapp,
+    concepto:p_tipo.value,
+    monto:Number(p_monto.value),
+    comprobante:{name:f.name,base64:r.result.split(",")[1],mimeType:f.type}
+  });
+  r.readAsDataURL(f);
+}
+</script>
+
+</body>
+</html>
