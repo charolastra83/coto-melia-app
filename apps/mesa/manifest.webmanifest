@@ -1,0 +1,23 @@
+{
+  "name": "Mesa Directiva - Coto Melia",
+  "short_name": "Mesa Directiva",
+  "start_url": "/apps/mesa/login.html",
+  "scope": "/apps/mesa/",
+  "display": "standalone",
+  "background_color": "#f3f2f1",
+  "theme_color": "#0f172a",
+  "icons": [
+    {
+      "src": "/apps/mesa/icons/app-icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "/apps/mesa/icons/app-icon-maskable.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "maskable"
+    }
+  ]
+}
