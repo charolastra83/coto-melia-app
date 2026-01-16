@@ -1,8 +1,8 @@
-Ôªø<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
-  <title>Coto Mel√≠a</title>
+  <title>Coto MelÌa</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
 
@@ -95,19 +95,16 @@
 <div class="card-box">
 
 <!-- LOGIN -->
-<<<<<<< HEAD
 <div id="stepLogin">
-=======
 <div id="stepLogin">
->>>>>>> 6a39cf2383a1d0d4905c489df7f1c36aeb42b6ba
-  <div class="titulo mb-3">üè° Administraci√≥n Coto Mel√≠a</div>
-  <input id="loginWhatsapp" class="form-control mb-2" placeholder="WhatsApp (solo n√∫meros)">
+  <div class="titulo mb-3">?? AdministraciÛn Coto MelÌa</div>
+  <input id="loginWhatsapp" class="form-control mb-2" placeholder="WhatsApp (solo n˙meros)">
   <button id="btnLogin" class="btn btn-primary w-100" onclick="login()">Entrar</button>
 </div>
 
 <!-- REGISTRO -->
 <div id="stepRegistro" class="hidden">
-  <div class="titulo mb-3">üìù Registro de casa</div>
+  <div class="titulo mb-3">?? Registro de casa</div>
 
   <div class="row g-2">
     <div class="col-md-6">
@@ -120,13 +117,13 @@
       <input id="regCalle" class="form-control" placeholder="Calle">
     </div>
     <div class="col-md-4">
-      <input id="regNumero" class="form-control" placeholder="N√∫mero">
+      <input id="regNumero" class="form-control" placeholder="N˙mero">
     </div>
     <div class="col-md-6">
       <select id="regTipo" class="form-select">
         <option value="">Tipo de casa</option>
         <option value="CASA">Casa</option>
-        <option value="DUPLEX">D√∫plex</option>
+        <option value="DUPLEX">D˙plex</option>
       </select>
     </div>
     <div class="col-md-6">
@@ -137,7 +134,7 @@
       </select>
     </div>
     <div class="col-md-6">
-      <input id="regInterior" class="form-control" placeholder="Interior (solo d√∫plex)">
+      <input id="regInterior" class="form-control" placeholder="Interior (solo d˙plex)">
     </div>
   </div>
 
@@ -149,20 +146,17 @@
 <!-- HOME -->
 <div id="stepHome" class="hidden">
   <div class="titulo mb-3">
-    <span>üè† Inicio</span>
-    <button class="btn btn-sm btn-outline-secondary" onclick="loadHome()">‚Üª</button>
+    <span>?? Inicio</span>
+    <button class="btn btn-sm btn-outline-secondary" onclick="loadHome()">?</button>
   </div>
 
-<<<<<<< HEAD
   <div id="homeInfo" class="mb-3"></div>
-=======
   <div id="homeInfo" class="mb-3"></div>
->>>>>>> 6a39cf2383a1d0d4905c489df7f1c36aeb42b6ba
   <div id="pendientesForm" class="mb-3"></div>
 
   <!-- RECIBO -->
   <div class="mb-4">
-    <b>üí° Recibo de luz</b><br>
+    <b>?? Recibo de luz</b><br>
     <div id="reciboEstado" class="mb-2"></div>
 
     <div id="reciboUploadBox" class="mt-2">
@@ -174,8 +168,8 @@
   <!-- MASCOTAS -->
   <div class="mb-4">
     <div class="d-flex justify-content-between align-items-center">
-      <b>üêæ Mascotas</b>
-      <button class="btn btn-sm btn-outline-secondary" onclick="toggleMascotaForm()">‚ûï Agregar mascota</button>
+      <b>?? Mascotas</b>
+      <button class="btn btn-sm btn-outline-secondary" onclick="toggleMascotaForm()">? Agregar mascota</button>
     </div>
     <div id="listaMascotas" class="mt-2"></div>
 
@@ -200,13 +194,13 @@
 
   <!-- PAGOS -->
   <div class="mb-3">
-    <b>üí∞ Pagos</b>
+    <b>?? Pagos</b>
     <div id="pagoResumen" class="mt-2"></div>
 
     <div class="mt-3">
       <select id="pagoTipo" class="form-select" onchange="onTipoPagoChange()">
         <option value="CUOTA">Cuota mensual ($150 pesos)</option>
-        <option value="PORTON">Port√≥n ($1,500 pesos)</option>
+        <option value="PORTON">PortÛn ($1,500 pesos)</option>
         <option value="MULTA">Multa</option>
         <option value="OTRO">Otro</option>
       </select>
@@ -248,19 +242,16 @@ const ui = {
   regApellido: document.getElementById("regApellido"),
   regCalle: document.getElementById("regCalle"),
   regNumero: document.getElementById("regNumero"),
-<<<<<<< HEAD
   regTipo: document.getElementById("regTipo"),
   regTenencia: document.getElementById("regTenencia"),
   regInterior: document.getElementById("regInterior"),
   btnRegistro: document.getElementById("btnRegistro"),
   homeInfo: document.getElementById("homeInfo"),
-=======
   regTipo: document.getElementById("regTipo"),
   regTenencia: document.getElementById("regTenencia"),
   regInterior: document.getElementById("regInterior"),
   btnRegistro: document.getElementById("btnRegistro"),
   homeInfo: document.getElementById("homeInfo"),
->>>>>>> 6a39cf2383a1d0d4905c489df7f1c36aeb42b6ba
   pendientesForm: document.getElementById("pendientesForm"),
   reciboEstado: document.getElementById("reciboEstado"),
   reciboUploadBox: document.getElementById("reciboUploadBox"),
@@ -399,7 +390,7 @@ function pendientesCasa(casa){
   if (!casa.nombre) pendientes.push("Nombre");
   if (!casa.apellido) pendientes.push("Apellido");
   if (!casa.calle) pendientes.push("Calle");
-  if (!casa.numero) pendientes.push("N√∫mero");
+  if (!casa.numero) pendientes.push("N˙mero");
   if (!casa.tipo_casa) pendientes.push("Tipo de casa");
   if (!casa.tenencia) pendientes.push("Tenencia");
   if (casa.tipo_casa === "DUPLEX" && !casa.interior) pendientes.push("Interior");
@@ -418,7 +409,7 @@ function renderInfoCasa(casa){
   ui.homeInfo.innerHTML = `
     <b>ID Casa:</b> ${casa.id_unico}<br>
     <b>Nombre:</b> ${nombre}<br>
-    <b>Direcci√≥n:</b> ${direccion}<br>
+    <b>DirecciÛn:</b> ${direccion}<br>
     <b>Tenencia:</b> ${casa.tenencia || "Pendiente de llenar"}<br>
     <b>WhatsApp:</b> ${casa.whatsapp}<br>
     <b>Pendientes:</b> ${pendientes.length ? `<span class="pendiente">${pendientes.join(", ")}</span>` : "Ninguno"}
@@ -462,8 +453,8 @@ function renderPendientesForm(casa, pendientes){
 
   if (!casa.numero) {
     html += `
-      <label class="form-label">N√∫mero</label>
-      <input id="pendienteNumero" class="form-control mb-2" type="text" placeholder="N√∫mero">
+      <label class="form-label">N˙mero</label>
+      <input id="pendienteNumero" class="form-control mb-2" type="text" placeholder="N˙mero">
     `;
   }
 
@@ -473,7 +464,7 @@ function renderPendientesForm(casa, pendientes){
       <select id="pendienteTipoCasa" class="form-select mb-2">
         <option value="">Selecciona</option>
         <option value="CASA">Casa</option>
-        <option value="DUPLEX">D√∫plex</option>
+        <option value="DUPLEX">D˙plex</option>
       </select>
     `;
   }
@@ -494,7 +485,7 @@ function renderPendientesForm(casa, pendientes){
     const claseInterior = casa.tipo_casa === "DUPLEX" ? "mb-2" : "mb-2 hidden";
     html += `
       <div id="pendienteInteriorBox" class="${claseInterior}">
-        <label class="form-label">Interior (solo d√∫plex)</label>
+        <label class="form-label">Interior (solo d˙plex)</label>
         <input id="pendienteInterior" class="form-control" type="text" placeholder="Interior">
       </div>
     `;
@@ -570,7 +561,7 @@ async function guardarPendientes(){
   if (numeroEl) {
     const valor = numeroEl.value.trim();
     if (!valor) {
-      alert("Completa el n√∫mero");
+      alert("Completa el n˙mero");
       return;
     }
     updates.numero = valor;
@@ -633,11 +624,8 @@ async function guardarPendientes(){
   } catch (err) {
     alert("Error al actualizar el perfil");
   }
-<<<<<<< HEAD
 }
-=======
 }
->>>>>>> 6a39cf2383a1d0d4905c489df7f1c36aeb42b6ba
 function renderRecibo(){
   if (SESSION.recibo) {
     const periodo = SESSION.recibo.periodo ? `Periodo: ${SESSION.recibo.periodo}` : "";
@@ -647,10 +635,10 @@ function renderRecibo(){
     const medidor = SESSION.recibo.numero_medidor ? `Medidor: ${SESSION.recibo.numero_medidor}` : "Medidor: Pendiente";
     const extra = [periodo, total].filter(Boolean).join(" | ");
 
-    ui.reciboEstado.innerHTML = `‚úÖ Recibo completado${extra ? "<br>" + extra : ""}<br>${titular}<br>${contrato}<br>${medidor}`;
+    ui.reciboEstado.innerHTML = `? Recibo completado${extra ? "<br>" + extra : ""}<br>${titular}<br>${contrato}<br>${medidor}`;
     hide(ui.reciboUploadBox);
   } else {
-    ui.reciboEstado.innerHTML = "‚è≥ Recibo pendiente";
+    ui.reciboEstado.innerHTML = "? Recibo pendiente";
     show(ui.reciboUploadBox);
   }
 }
@@ -692,9 +680,9 @@ function renderPagos(){
     ui.pagoResumen.innerHTML = "<i>Sin pagos registrados</i>";
   } else {
     const ultimo = SESSION.pagos[0];
-    const estado = ultimo.estatus === "VALIDADO" ? "Validado" : "Pendiente de validaci√≥n";
+    const estado = ultimo.estatus === "VALIDADO" ? "Validado" : "Pendiente de validaciÛn";
     ui.pagoResumen.innerHTML = `
-      <div><b>√öltimo pago:</b> ${ultimo.tipo} ${ultimo.mes ? "(" + ultimo.mes + ")" : ""} - ${formatearDinero(ultimo.monto)}</div>
+      <div><b>⁄ltimo pago:</b> ${ultimo.tipo} ${ultimo.mes ? "(" + ultimo.mes + ")" : ""} - ${formatearDinero(ultimo.monto)}</div>
       <div class="text-muted">Folio: ${ultimo.folio} | ${estado}</div>
     `;
   }
@@ -710,12 +698,12 @@ function renderPagos(){
   const resumenTotales = `
     <div class="mt-2">
       <div><b>Cuota:</b> Validado ${formatearDinero(cuotaValidado)} | Pendiente ${formatearDinero(cuotaPendiente)} | Saldo ${formatearDinero(cuotaRestante)}</div>
-      <div><b>Port√≥n:</b> Validado ${formatearDinero(portonValidado)} | Pendiente ${formatearDinero(portonPendiente)} | Saldo ${formatearDinero(portonRestante)}</div>
+      <div><b>PortÛn:</b> Validado ${formatearDinero(portonValidado)} | Pendiente ${formatearDinero(portonPendiente)} | Saldo ${formatearDinero(portonRestante)}</div>
     </div>
   `;
 
   const historial = SESSION.pagos.map((p) => {
-    const estado = p.estatus === "VALIDADO" ? "Validado" : "Pendiente de validaci√≥n";
+    const estado = p.estatus === "VALIDADO" ? "Validado" : "Pendiente de validaciÛn";
     return `
       <div class="border-top pt-2 mt-2">
         <div>${p.tipo}${p.mes ? " - " + p.mes : ""} | ${formatearDinero(p.monto)}</div>
@@ -831,7 +819,7 @@ async function invocarReciboOCR(path){
 async function login(){
   const whatsapp = normalizarWhatsapp(ui.loginWhatsapp.value);
   if (!whatsapp) {
-    alert("Ingresa un WhatsApp v√°lido");
+    alert("Ingresa un WhatsApp v·lido");
     return;
   }
 
@@ -871,13 +859,10 @@ async function registrarCasa(){
   const apellido = ui.regApellido.value.trim();
   const calle = ui.regCalle.value.trim();
   const numero = ui.regNumero.value.trim();
-<<<<<<< HEAD
   const tipoCasa = ui.regTipo.value;
   const tenencia = ui.regTenencia.value;
-=======
   const tipoCasa = ui.regTipo.value;
   const tenencia = ui.regTenencia.value;
->>>>>>> 6a39cf2383a1d0d4905c489df7f1c36aeb42b6ba
   const interior = ui.regInterior.value.trim();
 
   if (!nombre || !apellido || !calle || !numero || !tipoCasa || !tenencia) {
@@ -886,7 +871,7 @@ async function registrarCasa(){
   }
 
   if (tipoCasa === "DUPLEX" && !interior) {
-    alert("El interior es obligatorio para d√∫plex");
+    alert("El interior es obligatorio para d˙plex");
     return;
   }
 
@@ -925,13 +910,10 @@ async function registrarCasa(){
         apellido,
         calle,
         numero,
-<<<<<<< HEAD
         tipo_casa: tipoCasa,
         tenencia,
-=======
         tipo_casa: tipoCasa,
         tenencia,
->>>>>>> 6a39cf2383a1d0d4905c489df7f1c36aeb42b6ba
         interior: tipoCasa === "DUPLEX" ? interior : null,
         id_unico: idUnico
       })
@@ -1182,7 +1164,7 @@ async function registrarPago(){
   }
 
   if (!monto || monto < 1) {
-    alert("Monto inv√°lido");
+    alert("Monto inv·lido");
     return;
   }
 
@@ -1190,17 +1172,17 @@ async function registrarPago(){
   const totalPortonValidado = sumPagos("PORTON", "VALIDADO");
 
   if (tipo === "CUOTA" && totalCuotaValidado >= CUOTA_TOTAL) {
-    alert("La cuota anual ya est√° cubierta");
+    alert("La cuota anual ya est· cubierta");
     return;
   }
 
   if (tipo === "PORTON" && totalPortonValidado >= PORTON_MAX) {
-    alert("El pago de port√≥n ya est√° cubierto");
+    alert("El pago de portÛn ya est· cubierto");
     return;
   }
 
   if (tipo === "PORTON" && monto + totalPortonValidado > PORTON_MAX) {
-    alert("El monto excede el m√°ximo acumulado de port√≥n");
+    alert("El monto excede el m·ximo acumulado de portÛn");
     return;
   }
 
@@ -1252,7 +1234,7 @@ async function registrarPago(){
     ui.folioText.innerHTML = `
       <b>Pago registrado correctamente</b><br>
       Folio: <b>${nuevoPago.folio}</b><br>
-      Pendiente de validaci√≥n<br>
+      Pendiente de validaciÛn<br>
       Toma screenshot de esta pantalla
     `;
     show(ui.folioBox);
@@ -1279,7 +1261,6 @@ window.aceptarFolio = aceptarFolio;
 window.onTipoPagoChange = onTipoPagoChange;
 </script>
 </body>
-<<<<<<< HEAD
 </html>
 
 
@@ -1295,7 +1276,6 @@ window.onTipoPagoChange = onTipoPagoChange;
 
 
 
-=======
 </html>
 
 
@@ -1311,4 +1291,3 @@ window.onTipoPagoChange = onTipoPagoChange;
 
 
 
->>>>>>> 6a39cf2383a1d0d4905c489df7f1c36aeb42b6ba
