@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 ﻿
+=======
+﻿
+>>>>>>> 6a39cf2383a1d0d4905c489df7f1c36aeb42b6ba
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -8,6 +12,7 @@
   <link rel="manifest" href="./manifest.webmanifest" />
   <meta name="theme-color" content="#0f172a" />
   <link rel="icon" href="./icons/app-icon.svg" type="image/svg+xml" />
+<<<<<<< HEAD
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700&display=swap" rel="stylesheet">
@@ -23,10 +28,24 @@
       --accent: #0f172a;
       --border: #e3e7ee;
       --shadow: 0 18px 40px rgba(15, 23, 42, 0.12);
+=======
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #f3f2f1;
+      --card: #ffffff;
+      --text: #1b1a19;
+      --muted: #605e5c;
+      --primary: #0078d4;
+      --primary-hover: #106ebe;
+      --border: #edebe9;
+      --shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+>>>>>>> 6a39cf2383a1d0d4905c489df7f1c36aeb42b6ba
       --radius: 10px;
     }
     * { box-sizing: border-box; }
     body {
+<<<<<<< HEAD
       background: radial-gradient(1200px 500px at 10% -10%, #dbe7ff 0%, rgba(219, 231, 255, 0) 60%),
         radial-gradient(900px 420px at 110% 0%, #d7f4f0 0%, rgba(215, 244, 240, 0) 55%),
         var(--bg);
@@ -36,6 +55,15 @@
     }
     .card-box {
       background: linear-gradient(180deg, #ffffff 0%, #fbfcfe 100%);
+=======
+      background: var(--bg);
+      color: var(--text);
+      padding: 20px;
+      font-family: "Segoe UI", "Segoe UI Variable", "Segoe UI Web", Tahoma, Geneva, Verdana, sans-serif;
+    }
+    .card-box {
+      background: var(--card);
+>>>>>>> 6a39cf2383a1d0d4905c489df7f1c36aeb42b6ba
       border: 1px solid var(--border);
       border-radius: var(--radius);
       padding: 24px;
@@ -44,8 +72,13 @@
       box-shadow: var(--shadow);
     }
     .titulo {
+<<<<<<< HEAD
       font-size: 1.35rem;
       font-weight: 700;
+=======
+      font-size: 1.25rem;
+      font-weight: 600;
+>>>>>>> 6a39cf2383a1d0d4905c489df7f1c36aeb42b6ba
       display: flex;
       justify-content: space-between;
       align-items: center;
@@ -59,7 +92,11 @@
     .btn-outline-success,
     .btn-outline-danger,
     .btn-outline-warning {
+<<<<<<< HEAD
       border-radius: 14px;
+=======
+      border-radius: 8px;
+>>>>>>> 6a39cf2383a1d0d4905c489df7f1c36aeb42b6ba
       font-weight: 600;
     }
     .btn-primary {
@@ -79,6 +116,7 @@
       background: var(--primary);
       border-color: var(--primary);
     }
+<<<<<<< HEAD
     .btn-outline-danger {
       color: #b42318;
       border-color: #f1b6b6;
@@ -109,6 +147,8 @@
       background: #12b76a;
       border-color: #12b76a;
     }
+=======
+>>>>>>> 6a39cf2383a1d0d4905c489df7f1c36aeb42b6ba
     .form-control,
     .form-select {
       border-radius: 8px;
@@ -145,6 +185,7 @@
       border: 1px solid var(--border);
       margin-right: 8px;
     }
+<<<<<<< HEAD
     .perfil-card {
       background: linear-gradient(180deg, #f8fbff 0%, #ffffff 100%);
       border: 1px solid #dfe7f2;
@@ -255,6 +296,8 @@
         padding: 10px 12px;
       }
     }
+=======
+>>>>>>> 6a39cf2383a1d0d4905c489df7f1c36aeb42b6ba
   </style>
 </head>
 <body>
@@ -353,7 +396,11 @@
         <div id="folioText"></div>
         <button id="btnFolioOk" class="btn btn-outline-primary w-100 mt-2">Aceptar</button>
       </div>
+<<<<<<< HEAD
     </div>
+=======
+    </div>
+>>>>>>> 6a39cf2383a1d0d4905c489df7f1c36aeb42b6ba
 
     <div id="logsSection" class="hidden">
       <div class="border rounded p-3 mb-3">
@@ -710,6 +757,7 @@
     }
 
       function renderInfoCasa(casa){
+<<<<<<< HEAD
         const nombre = casa.nombre && casa.apellido
           ? `${casa.nombre} ${casa.apellido}`
           : "Pendiente de llenar";
@@ -749,6 +797,24 @@
             </div>
           </div>
         `;
+=======
+      const nombre = casa.nombre && casa.apellido
+        ? `${casa.nombre} ${casa.apellido}`
+        : "Pendiente de llenar";
+      const direccion = casa.calle && casa.numero
+        ? `${casa.calle} ${casa.numero}${casa.interior ? " - " + casa.interior : ""}`
+        : "Pendiente de llenar";
+      const pendientes = pendientesCasa(casa);
+
+      ui.homeInfo.innerHTML = `
+        <b>ID Casa:</b> ${casa.id_unico}<br>
+        <b>Nombre:</b> ${nombre}<br>
+        <b>Dirección:</b> ${direccion}<br>
+        <b>Tenencia:</b> ${casa.tenencia || "Pendiente de llenar"}<br>
+        <b>WhatsApp:</b> ${casa.whatsapp}<br>
+        <b>Pendientes:</b> ${pendientes.length ? `<span class="pendiente">${pendientes.join(", ")}</span>` : "Ninguno"}
+      `;
+>>>>>>> 6a39cf2383a1d0d4905c489df7f1c36aeb42b6ba
 
         renderEstadoCasa(casa);
         renderPendientesForm(casa, pendientes);
@@ -997,7 +1063,11 @@
       } catch (err) {
         alert("Error al actualizar el perfil");
       }
+<<<<<<< HEAD
     }
+=======
+    }
+>>>>>>> 6a39cf2383a1d0d4905c489df7f1c36aeb42b6ba
 
     function sumPagos(tipo, estatus){
       return SESSION.pagos
@@ -2115,5 +2185,10 @@
   </script>
 </body>
 </html>
+<<<<<<< HEAD
 
 
+=======
+
+
+>>>>>>> 6a39cf2383a1d0d4905c489df7f1c36aeb42b6ba

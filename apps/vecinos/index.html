@@ -95,7 +95,11 @@
 <div class="card-box">
 
 <!-- LOGIN -->
+<<<<<<< HEAD
 <div id="stepLogin">
+=======
+<div id="stepLogin">
+>>>>>>> 6a39cf2383a1d0d4905c489df7f1c36aeb42b6ba
   <div class="titulo mb-3">🏡 Administración Coto Melía</div>
   <input id="loginWhatsapp" class="form-control mb-2" placeholder="WhatsApp (solo números)">
   <button id="btnLogin" class="btn btn-primary w-100" onclick="login()">Entrar</button>
@@ -149,7 +153,11 @@
     <button class="btn btn-sm btn-outline-secondary" onclick="loadHome()">↻</button>
   </div>
 
+<<<<<<< HEAD
   <div id="homeInfo" class="mb-3"></div>
+=======
+  <div id="homeInfo" class="mb-3"></div>
+>>>>>>> 6a39cf2383a1d0d4905c489df7f1c36aeb42b6ba
   <div id="pendientesForm" class="mb-3"></div>
 
   <!-- RECIBO -->
@@ -240,11 +248,19 @@ const ui = {
   regApellido: document.getElementById("regApellido"),
   regCalle: document.getElementById("regCalle"),
   regNumero: document.getElementById("regNumero"),
+<<<<<<< HEAD
   regTipo: document.getElementById("regTipo"),
   regTenencia: document.getElementById("regTenencia"),
   regInterior: document.getElementById("regInterior"),
   btnRegistro: document.getElementById("btnRegistro"),
   homeInfo: document.getElementById("homeInfo"),
+=======
+  regTipo: document.getElementById("regTipo"),
+  regTenencia: document.getElementById("regTenencia"),
+  regInterior: document.getElementById("regInterior"),
+  btnRegistro: document.getElementById("btnRegistro"),
+  homeInfo: document.getElementById("homeInfo"),
+>>>>>>> 6a39cf2383a1d0d4905c489df7f1c36aeb42b6ba
   pendientesForm: document.getElementById("pendientesForm"),
   reciboEstado: document.getElementById("reciboEstado"),
   reciboUploadBox: document.getElementById("reciboUploadBox"),
@@ -617,7 +633,11 @@ async function guardarPendientes(){
   } catch (err) {
     alert("Error al actualizar el perfil");
   }
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> 6a39cf2383a1d0d4905c489df7f1c36aeb42b6ba
 function renderRecibo(){
   if (SESSION.recibo) {
     const periodo = SESSION.recibo.periodo ? `Periodo: ${SESSION.recibo.periodo}` : "";
@@ -851,8 +871,13 @@ async function registrarCasa(){
   const apellido = ui.regApellido.value.trim();
   const calle = ui.regCalle.value.trim();
   const numero = ui.regNumero.value.trim();
+<<<<<<< HEAD
   const tipoCasa = ui.regTipo.value;
   const tenencia = ui.regTenencia.value;
+=======
+  const tipoCasa = ui.regTipo.value;
+  const tenencia = ui.regTenencia.value;
+>>>>>>> 6a39cf2383a1d0d4905c489df7f1c36aeb42b6ba
   const interior = ui.regInterior.value.trim();
 
   if (!nombre || !apellido || !calle || !numero || !tipoCasa || !tenencia) {
@@ -900,8 +925,13 @@ async function registrarCasa(){
         apellido,
         calle,
         numero,
+<<<<<<< HEAD
         tipo_casa: tipoCasa,
         tenencia,
+=======
+        tipo_casa: tipoCasa,
+        tenencia,
+>>>>>>> 6a39cf2383a1d0d4905c489df7f1c36aeb42b6ba
         interior: tipoCasa === "DUPLEX" ? interior : null,
         id_unico: idUnico
       })
@@ -1249,6 +1279,7 @@ window.aceptarFolio = aceptarFolio;
 window.onTipoPagoChange = onTipoPagoChange;
 </script>
 </body>
+<<<<<<< HEAD
 </html>
 
 
@@ -1264,3 +1295,20 @@ window.onTipoPagoChange = onTipoPagoChange;
 
 
 
+=======
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+>>>>>>> 6a39cf2383a1d0d4905c489df7f1c36aeb42b6ba

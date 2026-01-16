@@ -246,4 +246,8 @@ registroForm.addEventListener("submit", async (event) => {
   if (!raw) return;
   window.location.href = "./home.html";
 })();
+<<<<<<< HEAD
 
+=======
+
+>>>>>>> 6a39cf2383a1d0d4905c489df7f1c36aeb42b6ba
