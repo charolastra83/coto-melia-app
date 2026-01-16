@@ -96,14 +96,14 @@
 
 <!-- LOGIN -->
 <div id="stepLogin">
-  <div class="titulo mb-3">?? Administración Coto Melía</div>
+  <div class="titulo mb-3">🏡 Administración Coto Melía</div>
   <input id="loginWhatsapp" class="form-control mb-2" placeholder="WhatsApp (solo números)">
   <button id="btnLogin" class="btn btn-primary w-100" onclick="login()">Entrar</button>
 </div>
 
 <!-- REGISTRO -->
 <div id="stepRegistro" class="hidden">
-  <div class="titulo mb-3">&#x1F4DD; Registro de casa</div>
+  <div class="titulo mb-3">📝 Registro de casa</div>
 
   <div class="row g-2">
     <div class="col-md-6">
@@ -145,8 +145,8 @@
 <!-- HOME -->
 <div id="stepHome" class="hidden">
   <div class="titulo mb-3">
-    <span>&#x1F3E0; Inicio</span>
-    <button class="btn btn-sm btn-outline-secondary" onclick="loadHome()">&#x21bb;</button>
+    <span>🏠 Inicio</span>
+    <button class="btn btn-sm btn-outline-secondary" onclick="loadHome()">↻</button>
   </div>
 
   <div id="homeInfo" class="mb-3"></div>
@@ -154,7 +154,7 @@
 
   <!-- RECIBO -->
   <div class="mb-4">
-    <b>&#x1F4A1; Recibo de luz</b><br>
+    <b>💡 Recibo de luz</b><br>
     <div id="reciboEstado" class="mb-2"></div>
 
     <div id="reciboUploadBox" class="mt-2">
@@ -166,8 +166,8 @@
   <!-- MASCOTAS -->
   <div class="mb-4">
     <div class="d-flex justify-content-between align-items-center">
-      <b>&#x1F43E; Mascotas</b>
-      <button class="btn btn-sm btn-outline-secondary" onclick="toggleMascotaForm()">&#x2795; Agregar mascota</button>
+      <b>🐾 Mascotas</b>
+      <button class="btn btn-sm btn-outline-secondary" onclick="toggleMascotaForm()">➕ Agregar mascota</button>
     </div>
     <div id="listaMascotas" class="mt-2"></div>
 
@@ -192,7 +192,7 @@
 
   <!-- PAGOS -->
   <div class="mb-3">
-    <b>&#x1F4B3; Pagos</b>
+    <b>💰 Pagos</b>
     <div id="pagoResumen" class="mt-2"></div>
 
     <div class="mt-3">
@@ -618,7 +618,6 @@ async function guardarPendientes(){
     alert("Error al actualizar el perfil");
   }
 }
-}
 function renderRecibo(){
   if (SESSION.recibo) {
     const periodo = SESSION.recibo.periodo ? `Periodo: ${SESSION.recibo.periodo}` : "";
@@ -628,10 +627,10 @@ function renderRecibo(){
     const medidor = SESSION.recibo.numero_medidor ? `Medidor: ${SESSION.recibo.numero_medidor}` : "Medidor: Pendiente";
     const extra = [periodo, total].filter(Boolean).join(" | ");
 
-    ui.reciboEstado.innerHTML = `? Recibo completado${extra ? "<br>" + extra : ""}<br>${titular}<br>${contrato}<br>${medidor}`;
+    ui.reciboEstado.innerHTML = `✅ Recibo completado${extra ? "<br>" + extra : ""}<br>${titular}<br>${contrato}<br>${medidor}`;
     hide(ui.reciboUploadBox);
   } else {
-    ui.reciboEstado.innerHTML = "? Recibo pendiente";
+    ui.reciboEstado.innerHTML = "⏳ Recibo pendiente";
     show(ui.reciboUploadBox);
   }
 }
@@ -854,8 +853,6 @@ async function registrarCasa(){
   const numero = ui.regNumero.value.trim();
   const tipoCasa = ui.regTipo.value;
   const tenencia = ui.regTenencia.value;
-  const tipoCasa = ui.regTipo.value;
-  const tenencia = ui.regTenencia.value;
   const interior = ui.regInterior.value.trim();
 
   if (!nombre || !apellido || !calle || !numero || !tipoCasa || !tenencia) {
@@ -903,8 +900,6 @@ async function registrarCasa(){
         apellido,
         calle,
         numero,
-        tipo_casa: tipoCasa,
-        tenencia,
         tipo_casa: tipoCasa,
         tenencia,
         interior: tipoCasa === "DUPLEX" ? interior : null,
@@ -1255,24 +1250,6 @@ window.onTipoPagoChange = onTipoPagoChange;
 </script>
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-</html>
-
-
-
 
 
 
