@@ -1,0 +1,144 @@
+﻿<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>🏛️ Mesa Directiva - Login</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="manifest" href="./manifest.webmanifest" />
+  <meta name="theme-color" content="#0f172a" />
+  <link rel="icon" href="./icons/app-icon.svg" type="image/svg+xml" />
+  <style>
+    :root {
+      --bg: #f3f2f1;
+      --card: #ffffff;
+      --text: #1b1a19;
+      --muted: #605e5c;
+      --primary: #0078d4;
+      --primary-hover: #106ebe;
+      --border: #edebe9;
+      --shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+      --radius: 10px;
+    }
+    * { box-sizing: border-box; }
+    body {
+      background: var(--bg);
+      padding: 20px;
+      color: var(--text);
+      font-family: "Segoe UI", "Segoe UI Variable", "Segoe UI Web", Tahoma, Geneva, Verdana, sans-serif;
+    }
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 24px;
+      max-width: 520px;
+      margin: auto;
+      box-shadow: var(--shadow);
+    }
+    .title { font-size: 1.2rem; font-weight: 600; margin-bottom: 12px; }
+    label { font-size: 0.9rem; color: var(--muted); }
+    input, select {
+      width: 100%;
+      padding: 10px 12px;
+      margin-top: 6px;
+      margin-bottom: 12px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      box-shadow: none;
+    }
+    input:focus, select:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 0.2rem rgba(0, 120, 212, 0.15);
+      outline: none;
+    }
+    button {
+      width: 100%;
+      padding: 10px 12px;
+      border: none;
+      border-radius: 8px;
+      background: var(--primary);
+      color: #fff;
+      font-weight: 600;
+    }
+    button:hover { background: var(--primary-hover); }
+    .error { color: #a4262c; margin-top: 10px; font-size: 0.9rem; }
+    .hidden { display: none; }
+    .box { padding: 12px; border: 1px solid var(--border); border-radius: 10px; margin-bottom: 12px; background: #faf9f8; }
+    .hint { font-size: 0.85rem; color: var(--muted); margin-top: -6px; margin-bottom: 12px; }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <div class="title">🏛️ Mesa Directiva</div>
+    <form id="loginForm">
+      <label for="rol">Rol</label>
+      <select id="rol" required>
+        <option value="">Selecciona</option>
+        <option value="ADMIN">Admin</option>
+        <option value="PRESIDENTE">Presidente</option>
+        <option value="TESORERO">Tesorero</option>
+        <option value="SECRETARIO">Secretario</option>
+      </select>
+
+      <label for="whatsapp">WhatsApp</label>
+      <input id="whatsapp" type="text" placeholder="Solo números" required />
+
+      <button type="submit" id="btnLogin">Continuar</button>
+      <div id="errorBox" class="error"></div>
+    </form>
+
+    <div id="registroBox" class="hidden">
+      <div class="hint">No existe perfil en vecinos. Completa el registro.</div>
+      <form id="registroForm">
+        <label for="nombre">Nombre</label>
+        <input id="nombre" type="text" required />
+
+        <label for="apellido">Apellido</label>
+        <input id="apellido" type="text" required />
+
+        <label for="calle">Calle</label>
+        <input id="calle" type="text" required />
+
+        <label for="numero">Número</label>
+        <input id="numero" type="text" required />
+
+        <label for="tipoCasa">Tipo de casa</label>
+        <select id="tipoCasa" required>
+          <option value="">Selecciona</option>
+          <option value="CASA">Casa</option>
+          <option value="DUPLEX">Duplex</option>
+        </select>
+
+        <label for="tenencia">Tenencia</label>
+        <select id="tenencia" required>
+          <option value="">Selecciona</option>
+          <option value="PROPIETARIO">Propietario</option>
+          <option value="RENTA">Renta</option>
+        </select>
+
+        <div id="interiorBox" class="hidden">
+          <label for="interior">Interior (solo duplex)</label>
+          <input id="interior" type="text" />
+        </div>
+
+        <button type="submit" id="btnRegistro">Guardar perfil</button>
+      </form>
+    </div>
+  </div>
+
+  <script type="module" src="./login.js"></script>
+  <script>
+    if ("serviceWorker" in navigator) {
+      window.addEventListener("load", () => {
+        navigator.serviceWorker.register("./sw.js");
+      });
+    }
+  </script>
+</body>
+</html>
+
+
+
+
+
+

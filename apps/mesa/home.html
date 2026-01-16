@@ -1,0 +1,1950 @@
+﻿
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>🏛️ Mesa Directiva</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="manifest" href="./manifest.webmanifest" />
+  <meta name="theme-color" content="#0f172a" />
+  <link rel="icon" href="./icons/app-icon.svg" type="image/svg+xml" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #f3f2f1;
+      --card: #ffffff;
+      --text: #1b1a19;
+      --muted: #605e5c;
+      --primary: #0078d4;
+      --primary-hover: #106ebe;
+      --border: #edebe9;
+      --shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+      --radius: 10px;
+    }
+    * { box-sizing: border-box; }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      padding: 20px;
+      font-family: "Segoe UI", "Segoe UI Variable", "Segoe UI Web", Tahoma, Geneva, Verdana, sans-serif;
+    }
+    .card-box {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 24px;
+      max-width: 1100px;
+      margin: auto;
+      box-shadow: var(--shadow);
+    }
+    .titulo {
+      font-size: 1.25rem;
+      font-weight: 600;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .hidden { display: none; }
+    .pendiente { color: #a4262c; font-weight: 600; }
+    .estado { font-weight: 600; }
+    .btn-primary,
+    .btn-outline-primary,
+    .btn-outline-secondary,
+    .btn-outline-success,
+    .btn-outline-danger,
+    .btn-outline-warning {
+      border-radius: 8px;
+      font-weight: 600;
+    }
+    .btn-primary {
+      background: var(--primary);
+      border-color: var(--primary);
+    }
+    .btn-primary:hover {
+      background: var(--primary-hover);
+      border-color: var(--primary-hover);
+    }
+    .btn-outline-primary {
+      color: var(--primary);
+      border-color: var(--primary);
+    }
+    .btn-outline-primary:hover {
+      color: #fff;
+      background: var(--primary);
+      border-color: var(--primary);
+    }
+    .form-control,
+    .form-select {
+      border-radius: 8px;
+      border-color: var(--border);
+      box-shadow: none;
+    }
+    .form-control:focus,
+    .form-select:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 0.2rem rgba(0, 120, 212, 0.15);
+    }
+    .table {
+      color: var(--text);
+      border-color: var(--border);
+    }
+    .table thead th {
+      font-weight: 600;
+      color: var(--muted);
+      border-bottom: 1px solid var(--border);
+    }
+    .table tbody tr:hover {
+      background: #faf9f8;
+    }
+    .alert {
+      border-radius: 10px;
+      border-color: var(--border);
+    }
+    .pet-img {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      object-fit: cover;
+      background: #f8f7f6;
+      border: 1px solid var(--border);
+      margin-right: 8px;
+    }
+  </style>
+</head>
+<body>
+  <div class="card-box">
+    <div class="titulo mb-3">
+      <span>🏛️ Mesa Directiva</span>
+      <div class="d-flex gap-2">
+        <a class="btn btn-sm btn-outline-secondary" href="./home.html">Inicio</a>
+        <button id="btnLogout" class="btn btn-sm btn-outline-danger">Cerrar sesión</button>
+      </div>
+    </div>
+
+    <div id="sessionInfo" class="text-muted mb-3"></div>
+
+    <div class="border rounded p-3 mb-3">
+      <div class="mb-2"><b>Buscar vecino</b></div>
+      <div class="row g-2 align-items-end">
+        <div class="col-md-6">
+          <label class="form-label">WhatsApp</label>
+          <input id="buscarWhatsapp" class="form-control" placeholder="WhatsApp (solo números)">
+        </div>
+        <div class="col-md-3">
+          <button id="btnBuscar" class="btn btn-primary w-100">Buscar</button>
+        </div>
+        <div class="col-md-3 text-muted" id="buscarEstado"></div>
+      </div>
+    </div>
+
+    <div id="perfilSection" class="hidden">
+      <div class="mb-3">
+        <b>Perfil del vecino</b>
+        <div id="homeInfo" class="mt-2"></div>
+        <div id="estadoCasa" class="mt-2"></div>
+      </div>
+
+      <div class="mb-3">
+        <b>Resumen del vecino</b>
+        <div id="reciboResumen" class="mt-2"></div>
+        <div id="mascotasResumen" class="mt-2"></div>
+      </div>
+
+      <div id="accionesSection" class="mb-3">
+        <div class="d-flex flex-wrap gap-2">
+          <button id="btnLogs" class="btn btn-outline-primary hidden">Ver logs</button>
+          <button id="btnReportes" class="btn btn-outline-primary hidden">Reporte de totales</button>
+          <button id="btnBloquear" class="btn btn-outline-warning">Bloquear WhatsApp</button>
+          <button id="btnDesbloquear" class="btn btn-outline-success hidden">Desbloquear WhatsApp</button>
+          <button id="btnEliminar" class="btn btn-outline-danger">Eliminar WhatsApp</button>
+          <button id="btnRestaurar" class="btn btn-outline-secondary hidden">Restaurar WhatsApp</button>
+        </div>
+      </div>
+
+      <div id="pendientesForm" class="mb-3"></div>
+
+      <div id="pagosSection" class="mb-3">
+        <b>💰 Pagos</b>
+        <div id="pagoResumen" class="mt-2"></div>
+
+        <div class="mt-3 border rounded p-3">
+          <div class="row g-2">
+            <div class="col-md-4">
+              <label class="form-label">Método de pago</label>
+              <select id="pagoMetodo" class="form-select">
+                <option value="EFECTIVO">Efectivo</option>
+                <option value="TRANSFERENCIA">Transferencia</option>
+              </select>
+            </div>
+            <div class="col-md-4">
+              <label class="form-label">Tipo de pago</label>
+              <select id="pagoTipo" class="form-select">
+                <option value="CUOTA">Cuota mensual ($150 pesos)</option>
+                <option value="PORTON">Portón ($1,500 pesos)</option>
+                <option value="MULTA">Multa</option>
+                <option value="OTRO">Otro</option>
+              </select>
+            </div>
+            <div class="col-md-4">
+              <label class="form-label">Mes (solo cuota)</label>
+              <select id="pagoMes" class="form-select"></select>
+            </div>
+            <div class="col-md-4">
+              <label class="form-label">Monto</label>
+              <input id="pagoMonto" class="form-control" value="150" type="number" min="1">
+              <div id="pagoMontoDisplay" class="text-muted small mt-1"></div>
+            </div>
+            <div class="col-md-8">
+              <label class="form-label">Concepto (solo OTRO)</label>
+              <input id="pagoConcepto" class="form-control" placeholder="Concepto">
+            </div>
+          </div>
+          <button id="btnPago" class="btn btn-primary w-100 mt-3">Registrar pago</button>
+        </div>
+      </div>
+
+      <div id="folioBox" class="alert alert-info hidden">
+        <div id="folioText"></div>
+        <button id="btnFolioOk" class="btn btn-outline-primary w-100 mt-2">Aceptar</button>
+      </div>
+    </div>
+
+    <div id="logsSection" class="hidden">
+      <div class="border rounded p-3 mb-3">
+        <div class="d-flex justify-content-between align-items-center mb-2">
+          <b>📋 Logs de mesa directiva</b>
+          <button id="btnRefrescarLogs" class="btn btn-sm btn-outline-secondary">Actualizar</button>
+        </div>
+        <div id="logsEstado" class="text-muted mb-2"></div>
+        <div class="table-responsive">
+          <table class="table table-sm">
+            <thead>
+              <tr>
+                <th>Fecha</th>
+                <th>Acción</th>
+                <th>Rol</th>
+                <th>WhatsApp</th>
+                <th>Casa</th>
+                <th>Folio</th>
+                <th>Detalle</th>
+                <th>Acciones</th>
+              </tr>
+            </thead>
+            <tbody id="logsTable"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="border rounded p-3">
+        <div class="d-flex justify-content-between align-items-center mb-2">
+          <b>👥 Usuarios de mesa</b>
+          <button id="btnRefrescarUsuarios" class="btn btn-sm btn-outline-secondary">Actualizar</button>
+        </div>
+        <div class="table-responsive">
+          <table class="table table-sm">
+            <thead>
+              <tr>
+                <th>Rol</th>
+                <th>Casa</th>
+                <th>Nombre</th>
+                <th>WhatsApp</th>
+                <th>Acciones</th>
+              </tr>
+            </thead>
+            <tbody id="usuariosTable"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <div id="reportesSection" class="hidden">
+      <div class="border rounded p-3 mb-3">
+        <div class="d-flex justify-content-between align-items-center mb-2">
+          <b>📊 Reporte de totales</b>
+          <button id="btnRefrescarReportes" class="btn btn-sm btn-outline-secondary">Actualizar</button>
+        </div>
+        <div id="reportesEstado" class="text-muted mb-2"></div>
+
+        <div class="table-responsive">
+          <table class="table table-sm">
+            <thead>
+              <tr>
+                <th>Casa</th>
+                <th>Nombre</th>
+                <th>Dirección</th>
+                <th>WhatsApp</th>
+                <th>Tenencia</th>
+                <th>Total validado</th>
+                <th>Total pendiente</th>
+                <th>Rol última acción</th>
+                <th>Acciones</th>
+              </tr>
+            </thead>
+            <tbody id="reporteCasas"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="border rounded p-3">
+        <b>🧾 Transacciones</b>
+        <div class="table-responsive mt-2">
+          <table class="table table-sm">
+            <thead>
+              <tr>
+                <th>Fecha</th>
+                <th>Casa</th>
+                <th>Tipo</th>
+                <th>Mes</th>
+                <th>Monto</th>
+                <th>Estatus</th>
+                <th>Folio</th>
+                <th>Concepto</th>
+                <th>Rol</th>
+                <th>Acciones</th>
+              </tr>
+            </thead>
+            <tbody id="reporteTransacciones"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="border rounded p-3 mt-3">
+        <b>🗑️ Transacciones eliminadas</b>
+        <div id="reporteEliminadosEstado" class="text-muted mb-2"></div>
+        <div class="table-responsive mt-2">
+          <table class="table table-sm">
+            <thead>
+              <tr>
+                <th>Fecha</th>
+                <th>Casa</th>
+                <th>Tipo</th>
+                <th>Mes</th>
+                <th>Monto</th>
+                <th>Folio</th>
+                <th>Concepto</th>
+                <th>Eliminado por</th>
+                <th>Fecha eliminación</th>
+              </tr>
+            </thead>
+            <tbody id="reporteEliminados"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <div id="adminSection" class="hidden">
+      <div class="border rounded p-3">
+        <div class="mb-2"><b>Alta de usuarios</b></div>
+        <div class="row g-2">
+          <div class="col-md-4">
+            <label class="form-label">Rol</label>
+            <select id="adminRol" class="form-select">
+              <option value="">Selecciona</option>
+              <option value="PRESIDENTE">Presidente</option>
+              <option value="TESORERO">Tesorero</option>
+              <option value="SECRETARIO">Secretario</option>
+              <option value="ADMIN">Admin</option>
+            </select>
+          </div>
+          <div class="col-md-8">
+            <label class="form-label">Vecino</label>
+            <select id="adminCasa" class="form-select"></select>
+          </div>
+        </div>
+        <button id="btnCrearUsuario" class="btn btn-outline-primary w-100 mt-3">Crear usuario</button>
+        <div id="adminEstado" class="text-muted mt-2"></div>
+      </div>
+    </div>
+  </div>
+
+  <script type="module">
+    import { supabase } from "./supabaseClient.js";
+
+    const MESA_SESSION_KEY = "mesa_session";
+    const SESSION = { rol: null, whatsapp: null, casa: null, pagos: [], recibo: null, mascotas: [] };
+
+    const MESES_2026 = [
+      "ENERO-2026",
+      "FEBRERO-2026",
+      "MARZO-2026",
+      "ABRIL-2026",
+      "MAYO-2026",
+      "JUNIO-2026",
+      "JULIO-2026",
+      "AGOSTO-2026",
+      "SEPTIEMBRE-2026",
+      "OCTUBRE-2026",
+      "NOVIEMBRE-2026",
+      "DICIEMBRE-2026"
+    ];
+
+    const CUOTA_TOTAL = 1800;
+    const CUOTA_MENSUAL = 150;
+    const PORTON_MAX = 1500;
+
+    const ui = {
+      sessionInfo: document.getElementById("sessionInfo"),
+      btnLogout: document.getElementById("btnLogout"),
+      buscarWhatsapp: document.getElementById("buscarWhatsapp"),
+      btnBuscar: document.getElementById("btnBuscar"),
+      buscarEstado: document.getElementById("buscarEstado"),
+        perfilSection: document.getElementById("perfilSection"),
+        homeInfo: document.getElementById("homeInfo"),
+        estadoCasa: document.getElementById("estadoCasa"),
+        reciboResumen: document.getElementById("reciboResumen"),
+        mascotasResumen: document.getElementById("mascotasResumen"),
+        accionesSection: document.getElementById("accionesSection"),
+      btnLogs: document.getElementById("btnLogs"),
+      btnReportes: document.getElementById("btnReportes"),
+      btnBloquear: document.getElementById("btnBloquear"),
+      btnDesbloquear: document.getElementById("btnDesbloquear"),
+      btnEliminar: document.getElementById("btnEliminar"),
+      btnRestaurar: document.getElementById("btnRestaurar"),
+      pendientesForm: document.getElementById("pendientesForm"),
+      pagosSection: document.getElementById("pagosSection"),
+      pagoMetodo: document.getElementById("pagoMetodo"),
+      pagoTipo: document.getElementById("pagoTipo"),
+      pagoMes: document.getElementById("pagoMes"),
+      pagoMonto: document.getElementById("pagoMonto"),
+      pagoMontoDisplay: document.getElementById("pagoMontoDisplay"),
+      pagoConcepto: document.getElementById("pagoConcepto"),
+      btnPago: document.getElementById("btnPago"),
+      pagoResumen: document.getElementById("pagoResumen"),
+      folioBox: document.getElementById("folioBox"),
+      folioText: document.getElementById("folioText"),
+      btnFolioOk: document.getElementById("btnFolioOk"),
+      logsSection: document.getElementById("logsSection"),
+      btnRefrescarLogs: document.getElementById("btnRefrescarLogs"),
+      logsEstado: document.getElementById("logsEstado"),
+      logsTable: document.getElementById("logsTable"),
+      btnRefrescarUsuarios: document.getElementById("btnRefrescarUsuarios"),
+      usuariosTable: document.getElementById("usuariosTable"),
+        reportesSection: document.getElementById("reportesSection"),
+        btnRefrescarReportes: document.getElementById("btnRefrescarReportes"),
+        reportesEstado: document.getElementById("reportesEstado"),
+        reporteCasas: document.getElementById("reporteCasas"),
+        reporteTransacciones: document.getElementById("reporteTransacciones"),
+        reporteEliminados: document.getElementById("reporteEliminados"),
+        reporteEliminadosEstado: document.getElementById("reporteEliminadosEstado"),
+        adminSection: document.getElementById("adminSection"),
+        adminRol: document.getElementById("adminRol"),
+        adminCasa: document.getElementById("adminCasa"),
+        btnCrearUsuario: document.getElementById("btnCrearUsuario"),
+        adminEstado: document.getElementById("adminEstado")
+    };
+
+    function show(el){ el.classList.remove("hidden"); }
+    function hide(el){ el.classList.add("hidden"); }
+    function normalizarWhatsapp(valor){ return (valor || "").replace(/\D/g, ""); }
+
+    function formatearDinero(valor){
+      const formato = new Intl.NumberFormat("es-MX", {
+        style: "currency",
+        currency: "MXN",
+        maximumFractionDigits: 0
+      }).format(valor || 0);
+      return `${formato} pesos`;
+    }
+
+    function generarFolio(){
+      const now = new Date();
+      const y = now.getFullYear();
+      const m = String(now.getMonth() + 1).padStart(2, "0");
+      const d = String(now.getDate()).padStart(2, "0");
+      const rand = String(Math.floor(Math.random() * 10000)).padStart(4, "0");
+      return `PAGO-${y}${m}${d}-${rand}`;
+    }
+
+    function cargarSesion(){
+      const raw = localStorage.getItem(MESA_SESSION_KEY);
+      if (!raw) {
+        window.location.href = "./login.html";
+        return false;
+      }
+      try {
+        const data = JSON.parse(raw);
+        SESSION.rol = data.rol;
+        SESSION.whatsapp = data.whatsapp;
+        ui.sessionInfo.textContent = `Sesión: ${SESSION.rol} | WhatsApp: ${SESSION.whatsapp}`;
+
+        const isAdmin = SESSION.rol === "ADMIN";
+        const isPresidente = SESSION.rol === "PRESIDENTE";
+        const isTesorero = SESSION.rol === "TESORERO";
+        const isSecretario = SESSION.rol === "SECRETARIO";
+
+          if (isAdmin) {
+            show(ui.adminSection);
+          }
+
+          if (isAdmin || isPresidente) {
+            show(ui.btnLogs);
+            show(ui.btnReportes);
+          }
+
+          if (isAdmin || isPresidente || isTesorero || isSecretario) {
+            show(ui.pagosSection);
+          }
+
+        return true;
+      } catch (err) {
+        localStorage.removeItem(MESA_SESSION_KEY);
+        window.location.href = "./login.html";
+        return false;
+      }
+    }
+
+    function puedeGestionarLogs(){
+      return SESSION.rol === "ADMIN";
+    }
+
+    function puedeGestionarUsuarios(){
+      return SESSION.rol === "ADMIN" || SESSION.rol === "PRESIDENTE";
+    }
+
+    function puedeGestionarReportes(){
+      return SESSION.rol === "ADMIN" || SESSION.rol === "PRESIDENTE" || SESSION.rol === "TESORERO";
+    }
+
+    function puedeGestionarTransacciones(){
+      return SESSION.rol === "ADMIN" || SESSION.rol === "PRESIDENTE" || SESSION.rol === "TESORERO";
+    }
+
+    async function cargarPerfilAdmin(){
+      if (SESSION.rol !== "ADMIN" || !SESSION.whatsapp) return;
+      ui.buscarWhatsapp.value = SESSION.whatsapp;
+      await buscarCasa();
+    }
+
+      function puedeAprobarRechazar(){
+        return SESSION.rol === "ADMIN" || SESSION.rol === "PRESIDENTE" || SESSION.rol === "TESORERO";
+      }
+
+    function pendientesCasa(casa){
+      const pendientes = [];
+      if (!casa.nombre) pendientes.push("Nombre");
+      if (!casa.apellido) pendientes.push("Apellido");
+      if (!casa.calle) pendientes.push("Calle");
+      if (!casa.numero) pendientes.push("Número");
+      if (!casa.tipo_casa) pendientes.push("Tipo de casa");
+      if (!casa.tenencia) pendientes.push("Tenencia");
+      if (casa.tipo_casa === "DUPLEX" && !casa.interior) pendientes.push("Interior");
+      return pendientes;
+    }
+
+    function renderEstadoCasa(casa){
+      const bloqueado = casa.bloqueado === true;
+      const eliminado = casa.eliminado === true;
+
+      if (!bloqueado && !eliminado) {
+        ui.estadoCasa.textContent = "";
+        hide(ui.btnDesbloquear);
+        hide(ui.btnRestaurar);
+        show(ui.btnBloquear);
+        return;
+      }
+
+      const etiquetas = [];
+      if (bloqueado) etiquetas.push("Bloqueado");
+      if (eliminado) etiquetas.push("Eliminado");
+
+      ui.estadoCasa.innerHTML = `<span class="estado text-danger">Estado: ${etiquetas.join(" / ")}</span>`;
+      if (bloqueado) {
+        show(ui.btnDesbloquear);
+        hide(ui.btnBloquear);
+      } else {
+        hide(ui.btnDesbloquear);
+        show(ui.btnBloquear);
+      }
+
+      if (eliminado) {
+        show(ui.btnRestaurar);
+      } else {
+        hide(ui.btnRestaurar);
+      }
+    }
+
+      function renderInfoCasa(casa){
+      const nombre = casa.nombre && casa.apellido
+        ? `${casa.nombre} ${casa.apellido}`
+        : "Pendiente de llenar";
+      const direccion = casa.calle && casa.numero
+        ? `${casa.calle} ${casa.numero}${casa.interior ? " - " + casa.interior : ""}`
+        : "Pendiente de llenar";
+      const pendientes = pendientesCasa(casa);
+
+      ui.homeInfo.innerHTML = `
+        <b>ID Casa:</b> ${casa.id_unico}<br>
+        <b>Nombre:</b> ${nombre}<br>
+        <b>Dirección:</b> ${direccion}<br>
+        <b>Tenencia:</b> ${casa.tenencia || "Pendiente de llenar"}<br>
+        <b>WhatsApp:</b> ${casa.whatsapp}<br>
+        <b>Pendientes:</b> ${pendientes.length ? `<span class="pendiente">${pendientes.join(", ")}</span>` : "Ninguno"}
+      `;
+
+        renderEstadoCasa(casa);
+        renderPendientesForm(casa, pendientes);
+      }
+
+      function renderReciboAdmin(){
+        if (!ui.reciboResumen) return;
+        if (!SESSION.recibo) {
+          ui.reciboResumen.innerHTML = "<b>Recibo de luz:</b> Pendiente";
+          return;
+        }
+
+        const recibo = SESSION.recibo;
+        const periodo = recibo.periodo ? `Periodo: ${recibo.periodo}` : "";
+        const total = recibo.total ? `Total: ${formatearDinero(recibo.total)}` : "";
+        const titular = recibo.titular ? `Titular: ${recibo.titular}` : "Titular: Pendiente";
+        const contrato = recibo.numero_contrato ? `Contrato: ${recibo.numero_contrato}` : "Contrato: Pendiente";
+        const medidor = recibo.numero_medidor ? `Medidor: ${recibo.numero_medidor}` : "Medidor: Pendiente";
+        const extra = [periodo, total].filter(Boolean).join(" | ");
+
+        ui.reciboResumen.innerHTML = `<b>Recibo de luz:</b> ${extra ? extra + "<br>" : ""}${titular}<br>${contrato}<br>${medidor}`;
+      }
+
+      function renderMascotasAdmin(){
+        if (!ui.mascotasResumen) return;
+        if (!SESSION.mascotas.length) {
+          ui.mascotasResumen.innerHTML = "<b>Mascotas:</b> Sin mascotas registradas";
+          return;
+        }
+
+        const lista = SESSION.mascotas.map((m) => {
+          const nombre = m.nombre || "Sin nombre";
+          const especie = m.especie || "Sin especie";
+          const raza = m.raza ? ` - ${m.raza}` : "";
+          const foto = m.foto_url
+            ? `<img src="${m.foto_url}" class="pet-img" onerror="this.removeAttribute('src'); this.classList.add('bg-light');">`
+            : `<span class="pet-img d-inline-block"></span>`;
+          return `<div class="d-flex align-items-center mb-2">${foto}<div>${nombre} (${especie}${raza})</div></div>`;
+        }).join("<br>");
+
+        ui.mascotasResumen.innerHTML = `<b>Mascotas:</b><div class="mt-1">${lista}</div>`;
+      }
+
+    function renderPendientesForm(casa, pendientes){
+      if (!pendientes.length) {
+        ui.pendientesForm.innerHTML = "";
+        return;
+      }
+
+      let html = `
+        <div class="border rounded p-3">
+          <div class="mb-2"><b>Completa los datos pendientes</b></div>
+      `;
+
+      if (!casa.nombre) {
+        html += `
+          <label class="form-label">Nombre</label>
+          <input id="pendienteNombre" class="form-control mb-2" type="text" placeholder="Nombre">
+        `;
+      }
+
+      if (!casa.apellido) {
+        html += `
+          <label class="form-label">Apellido</label>
+          <input id="pendienteApellido" class="form-control mb-2" type="text" placeholder="Apellido">
+        `;
+      }
+
+      if (!casa.calle) {
+        html += `
+          <label class="form-label">Calle</label>
+          <input id="pendienteCalle" class="form-control mb-2" type="text" placeholder="Calle">
+        `;
+      }
+
+      if (!casa.numero) {
+        html += `
+          <label class="form-label">Número</label>
+          <input id="pendienteNumero" class="form-control mb-2" type="text" placeholder="Número">
+        `;
+      }
+
+      if (!casa.tipo_casa) {
+        html += `
+          <label class="form-label">Tipo de casa</label>
+          <select id="pendienteTipoCasa" class="form-select mb-2">
+            <option value="">Selecciona</option>
+            <option value="CASA">Casa</option>
+            <option value="DUPLEX">Dúplex</option>
+          </select>
+        `;
+      }
+
+      if (!casa.tenencia) {
+        html += `
+          <label class="form-label">Tenencia</label>
+          <select id="pendienteTenencia" class="form-select mb-2">
+            <option value="">Selecciona</option>
+            <option value="PROPIETARIO">Propietario</option>
+            <option value="RENTA">Renta</option>
+          </select>
+        `;
+      }
+
+      const necesitaInterior = casa.tipo_casa === "DUPLEX" || !casa.tipo_casa;
+      if (necesitaInterior && !casa.interior) {
+        const claseInterior = casa.tipo_casa === "DUPLEX" ? "mb-2" : "mb-2 hidden";
+        html += `
+          <div id="pendienteInteriorBox" class="${claseInterior}">
+            <label class="form-label">Interior (solo dúplex)</label>
+            <input id="pendienteInterior" class="form-control" type="text" placeholder="Interior">
+          </div>
+        `;
+      }
+
+      html += `
+          <button id="btnGuardarPendientes" class="btn btn-outline-primary w-100">Guardar</button>
+        </div>
+      `;
+
+      ui.pendientesForm.innerHTML = html;
+
+      const tipoSelect = document.getElementById("pendienteTipoCasa");
+      if (tipoSelect) {
+        tipoSelect.addEventListener("change", togglePendienteInterior);
+        togglePendienteInterior();
+      }
+
+      const btnGuardar = document.getElementById("btnGuardarPendientes");
+      if (btnGuardar) {
+        btnGuardar.addEventListener("click", guardarPendientes);
+      }
+    }
+
+    function togglePendienteInterior(){
+      const tipoSelect = document.getElementById("pendienteTipoCasa");
+      const interiorBox = document.getElementById("pendienteInteriorBox");
+      const interiorInput = document.getElementById("pendienteInterior");
+      if (!tipoSelect || !interiorBox) return;
+
+      if (tipoSelect.value === "DUPLEX") {
+        interiorBox.classList.remove("hidden");
+      } else {
+        interiorBox.classList.add("hidden");
+        if (interiorInput) interiorInput.value = "";
+      }
+    }
+
+    async function guardarPendientes(){
+      const updates = {};
+
+      const nombreEl = document.getElementById("pendienteNombre");
+      if (nombreEl) {
+        const valor = nombreEl.value.trim();
+        if (!valor) {
+          alert("Completa el nombre");
+          return;
+        }
+        updates.nombre = valor;
+      }
+
+      const apellidoEl = document.getElementById("pendienteApellido");
+      if (apellidoEl) {
+        const valor = apellidoEl.value.trim();
+        if (!valor) {
+          alert("Completa el apellido");
+          return;
+        }
+        updates.apellido = valor;
+      }
+
+      const calleEl = document.getElementById("pendienteCalle");
+      if (calleEl) {
+        const valor = calleEl.value.trim();
+        if (!valor) {
+          alert("Completa la calle");
+          return;
+        }
+        updates.calle = valor;
+      }
+
+      const numeroEl = document.getElementById("pendienteNumero");
+      if (numeroEl) {
+        const valor = numeroEl.value.trim();
+        if (!valor) {
+          alert("Completa el número");
+          return;
+        }
+        updates.numero = valor;
+      }
+
+      const tipoEl = document.getElementById("pendienteTipoCasa");
+      if (tipoEl) {
+        const valor = tipoEl.value;
+        if (!valor) {
+          alert("Selecciona el tipo de casa");
+          return;
+        }
+        updates.tipo_casa = valor;
+        if (valor === "CASA") updates.interior = null;
+      }
+
+      const tenenciaEl = document.getElementById("pendienteTenencia");
+      if (tenenciaEl) {
+        const valor = tenenciaEl.value;
+        if (!valor) {
+          alert("Selecciona la tenencia");
+          return;
+        }
+        updates.tenencia = valor;
+      }
+
+      const interiorEl = document.getElementById("pendienteInterior");
+      if (interiorEl) {
+        const tipoActual = tipoEl ? tipoEl.value : SESSION.casa.tipo_casa;
+        const valor = interiorEl.value.trim();
+        if (tipoActual === "DUPLEX") {
+          if (!valor) {
+            alert("Captura el interior");
+            return;
+          }
+          updates.interior = valor;
+        } else if (tipoActual === "CASA") {
+          updates.interior = null;
+        }
+      }
+
+      if (!Object.keys(updates).length) {
+        return;
+      }
+
+      try {
+        const { error } = await supabase
+          .from("casas")
+          .update(updates)
+          .eq("id", SESSION.casa.id);
+
+        if (error) {
+          console.error("Error al actualizar perfil", error);
+          alert("Error al actualizar el perfil");
+          return;
+        }
+
+        SESSION.casa = { ...SESSION.casa, ...updates };
+        renderInfoCasa(SESSION.casa);
+      } catch (err) {
+        alert("Error al actualizar el perfil");
+      }
+    }
+
+    function sumPagos(tipo, estatus){
+      return SESSION.pagos
+        .filter((p) => p.tipo === tipo && p.estatus === estatus)
+        .reduce((sum, p) => sum + Number(p.monto || 0), 0);
+    }
+
+    function mesesCuotaDisponibles(){
+      const usados = new Set(
+        SESSION.pagos
+          .filter((p) => p.tipo === "CUOTA" && p.mes && p.estatus !== "RECHAZADO")
+          .map((p) => p.mes)
+      );
+      return MESES_2026.filter((mes) => !usados.has(mes));
+    }
+
+    function renderPagos(){
+      if (!SESSION.pagos.length) {
+        ui.pagoResumen.innerHTML = "<i>Sin pagos registrados</i>";
+      } else {
+        const ultimo = SESSION.pagos[0];
+        ui.pagoResumen.innerHTML = `
+          <div><b>Último pago:</b> ${ultimo.tipo} ${ultimo.mes ? "(" + ultimo.mes + ")" : ""} - ${formatearDinero(ultimo.monto)}</div>
+          <div class="text-muted">Folio: ${ultimo.folio} | ${ultimo.estatus}</div>
+        `;
+      }
+
+      const cuotaValidado = sumPagos("CUOTA", "VALIDADO");
+      const cuotaPendiente = sumPagos("CUOTA", "PENDIENTE");
+      const cuotaRestante = Math.max(0, CUOTA_TOTAL - cuotaValidado);
+
+      const portonValidado = sumPagos("PORTON", "VALIDADO");
+      const portonPendiente = sumPagos("PORTON", "PENDIENTE");
+      const portonRestante = Math.max(0, PORTON_MAX - portonValidado);
+
+      const resumenTotales = `
+        <div class="mt-2">
+          <div><b>Cuota:</b> Validado ${formatearDinero(cuotaValidado)} | Pendiente ${formatearDinero(cuotaPendiente)} | Saldo ${formatearDinero(cuotaRestante)}</div>
+          <div><b>Portón:</b> Validado ${formatearDinero(portonValidado)} | Pendiente ${formatearDinero(portonPendiente)} | Saldo ${formatearDinero(portonRestante)}</div>
+        </div>
+      `;
+
+      const historial = SESSION.pagos.map((p) => {
+        const acciones = (p.estatus === "PENDIENTE" && puedeAprobarRechazar())
+          ? `
+            <div class="mt-1 d-flex gap-2">
+              <button class="btn btn-sm btn-outline-success btn-aprobar" data-id="${p.id}">Aprobar</button>
+              <button class="btn btn-sm btn-outline-danger btn-rechazar" data-id="${p.id}">Rechazar</button>
+            </div>
+          `
+          : "";
+        return `
+          <div class="border-top pt-2 mt-2">
+            <div>${p.tipo}${p.mes ? " - " + p.mes : ""} | ${formatearDinero(p.monto)}</div>
+            <div class="text-muted">Folio: ${p.folio} | ${p.estatus}</div>
+            ${acciones}
+          </div>
+        `;
+      }).join("");
+
+      ui.pagoResumen.innerHTML += resumenTotales + (historial ? `<div class="mt-2">${historial}</div>` : "");
+
+      ui.pagoResumen.querySelectorAll(".btn-aprobar").forEach((btn) => {
+        btn.addEventListener("click", () => actualizarEstatusPago(btn.dataset.id, "VALIDADO"));
+      });
+      ui.pagoResumen.querySelectorAll(".btn-rechazar").forEach((btn) => {
+        btn.addEventListener("click", () => actualizarEstatusPago(btn.dataset.id, "RECHAZADO"));
+      });
+    }
+
+    function actualizarMesesCuota(){
+      const disponibles = mesesCuotaDisponibles();
+      if (!disponibles.length) {
+        ui.pagoMes.innerHTML = `<option value="" disabled selected>Sin meses disponibles</option>`;
+        return;
+      }
+
+      ui.pagoMes.innerHTML = disponibles
+        .map((mes) => `<option value="${mes}">${mes}</option>`)
+        .join("");
+
+      if (!disponibles.includes(ui.pagoMes.value)) {
+        ui.pagoMes.value = disponibles[0];
+      }
+    }
+
+    function validarReglasPago(){
+      const tipo = ui.pagoTipo.value;
+      const totalCuotaValidado = sumPagos("CUOTA", "VALIDADO");
+      const totalPortonValidado = sumPagos("PORTON", "VALIDADO");
+      const cuotaDisponible = mesesCuotaDisponibles().length > 0;
+
+      const cuotaCubierta = totalCuotaValidado >= CUOTA_TOTAL;
+      const portonCubierto = totalPortonValidado >= PORTON_MAX;
+
+      if (tipo === "CUOTA") {
+        ui.pagoMonto.value = CUOTA_MENSUAL;
+        ui.pagoMonto.disabled = true;
+        ui.pagoMes.disabled = cuotaCubierta || !cuotaDisponible;
+      } else {
+        ui.pagoMonto.disabled = false;
+        ui.pagoMes.disabled = true;
+        ui.pagoMes.value = "";
+      }
+
+      if (tipo === "PORTON") {
+        ui.pagoMonto.min = 1;
+        ui.pagoMonto.max = PORTON_MAX;
+        if (!ui.pagoMonto.value || Number(ui.pagoMonto.value) === CUOTA_MENSUAL) {
+          ui.pagoMonto.value = PORTON_MAX;
+        }
+      } else {
+        ui.pagoMonto.min = 1;
+        ui.pagoMonto.max = "";
+      }
+
+      if (tipo === "OTRO") {
+        ui.pagoConcepto.disabled = false;
+      } else {
+        ui.pagoConcepto.disabled = true;
+        ui.pagoConcepto.value = "";
+      }
+
+      const bloqueado = (tipo === "CUOTA" && cuotaCubierta) || (tipo === "PORTON" && portonCubierto);
+      ui.btnPago.disabled = bloqueado;
+      ui.btnPago.textContent = bloqueado ? "Pago bloqueado" : "Registrar pago";
+
+      actualizarPagoMontoDisplay();
+    }
+
+    function actualizarPagoMontoDisplay(){
+      const monto = Number(ui.pagoMonto.value || 0);
+      ui.pagoMontoDisplay.textContent = `Monto: ${formatearDinero(monto)}`;
+    }
+
+    async function logMesa(accion, detalle = "", folio = null, vecinoId = null){
+      try {
+        const payload = {
+          accion,
+          rol: SESSION.rol,
+          whatsapp: SESSION.whatsapp,
+          vecino_id: vecinoId,
+          folio,
+          detalle
+        };
+
+        const { error } = await supabase
+          .from("logs_mesa")
+          .insert(payload);
+
+        if (error) {
+          console.warn("No se pudo registrar log", error);
+        }
+      } catch (err) {
+        console.warn("No se pudo registrar log", err);
+      }
+    }
+
+    async function buscarCasa(){
+      const whatsapp = normalizarWhatsapp(ui.buscarWhatsapp.value.trim());
+      if (!whatsapp) {
+        ui.buscarEstado.textContent = "Ingresa un WhatsApp válido";
+        return;
+      }
+
+      ui.buscarEstado.textContent = "Buscando...";
+      ui.btnBuscar.disabled = true;
+
+      try {
+        const { data, error } = await supabase
+          .from("casas")
+          .select("*")
+          .eq("whatsapp", whatsapp)
+          .maybeSingle();
+
+        if (error) {
+          ui.buscarEstado.textContent = "Error al buscar";
+          return;
+        }
+
+        if (!data) {
+          ui.buscarEstado.textContent = "No existe perfil en vecinos";
+          hide(ui.perfilSection);
+          SESSION.casa = null;
+          return;
+        }
+
+        SESSION.casa = data;
+        ui.buscarEstado.textContent = "Perfil cargado";
+        await cargarDatosCasa();
+      } finally {
+        ui.btnBuscar.disabled = false;
+      }
+    }
+
+    function validarCasaParaPagos(){
+      if (!SESSION.casa) return false;
+      if (SESSION.casa.eliminado) {
+        alert("Este perfil está eliminado y no puede recibir pagos");
+        return false;
+      }
+      if (SESSION.casa.bloqueado) {
+        alert("Este perfil está bloqueado y no puede recibir pagos");
+        return false;
+      }
+      return true;
+    }
+
+      async function cargarDatosCasa(){
+        if (!SESSION.casa) return;
+
+      const { data: casaData } = await supabase
+        .from("casas")
+        .select("*")
+        .eq("id", SESSION.casa.id)
+        .maybeSingle();
+
+      if (casaData) {
+        SESSION.casa = casaData;
+      }
+
+        const { data: pagos } = await supabase
+          .from("pagos")
+          .select("*")
+          .eq("casa_id", SESSION.casa.id)
+          .order("created_at", { ascending: false });
+
+        const pagosActivos = (pagos || []).filter((p) => p.estatus !== "ELIMINADO");
+        SESSION.pagos = pagosActivos;
+
+        const { data: recibo, error: reciboError } = await supabase
+          .from("recibos_luz")
+          .select("*")
+          .eq("casa_id", SESSION.casa.id)
+          .maybeSingle();
+
+        if (reciboError) {
+          console.error("Error al cargar recibo", reciboError);
+          SESSION.recibo = null;
+        } else {
+          SESSION.recibo = recibo || null;
+        }
+
+        const { data: mascotas, error: mascotasError } = await supabase
+          .from("mascotas")
+          .select("*")
+          .eq("casa_id", SESSION.casa.id)
+          .order("created_at", { ascending: false });
+
+        if (mascotasError) {
+          console.error("Error al cargar mascotas", mascotasError);
+          SESSION.mascotas = [];
+        } else {
+          SESSION.mascotas = mascotas || [];
+        }
+
+        renderInfoCasa(SESSION.casa);
+        renderReciboAdmin();
+        renderMascotasAdmin();
+        renderPagos();
+        actualizarMesesCuota();
+        validarReglasPago();
+        show(ui.perfilSection);
+        hide(ui.folioBox);
+      }
+
+    async function registrarPago(){
+      if (!SESSION.casa) return;
+      if (!validarCasaParaPagos()) return;
+
+      const tipo = ui.pagoTipo.value;
+      const metodo = ui.pagoMetodo.value;
+      const monto = Number(ui.pagoMonto.value);
+      const mes = tipo === "CUOTA" ? ui.pagoMes.value : null;
+      const conceptoInput = ui.pagoConcepto.value.trim();
+
+      if (tipo === "CUOTA" && !mes) {
+        alert("Selecciona un mes para la cuota");
+        return;
+      }
+
+      if (tipo === "CUOTA") {
+        const mesYaRegistrado = SESSION.pagos.some(
+          (p) => p.tipo === "CUOTA" && p.mes === mes && p.estatus !== "RECHAZADO"
+        );
+        if (mesYaRegistrado) {
+          alert("Ese mes ya tiene un pago registrado");
+          actualizarMesesCuota();
+          validarReglasPago();
+          return;
+        }
+      }
+
+      if (tipo === "OTRO" && !conceptoInput) {
+        alert("Debes agregar un concepto");
+        return;
+      }
+
+      if (!monto || monto < 1) {
+        alert("Monto inválido");
+        return;
+      }
+
+      const totalCuotaValidado = sumPagos("CUOTA", "VALIDADO");
+      const totalPortonValidado = sumPagos("PORTON", "VALIDADO");
+
+      if (tipo === "CUOTA" && totalCuotaValidado >= CUOTA_TOTAL) {
+        alert("La cuota anual ya está cubierta");
+        return;
+      }
+
+      if (tipo === "PORTON" && totalPortonValidado >= PORTON_MAX) {
+        alert("El pago de portón ya está cubierto");
+        return;
+      }
+
+      if (tipo === "PORTON" && monto + totalPortonValidado > PORTON_MAX) {
+        alert("El monto excede el máximo acumulado de portón");
+        return;
+      }
+
+      const folio = generarFolio();
+      const concepto = tipo === "OTRO"
+        ? `${conceptoInput} | Método: ${metodo}`
+        : `Método: ${metodo}`;
+
+      ui.btnPago.disabled = true;
+
+      try {
+        const { data: nuevoPago, error: insertError } = await supabase
+          .from("pagos")
+          .insert({
+            casa_id: SESSION.casa.id,
+            tipo,
+            mes,
+            monto,
+            concepto,
+            folio,
+            estatus: "VALIDADO"
+          })
+          .select("*")
+          .single();
+
+        if (insertError) {
+          console.error("Error al registrar pago", insertError);
+          alert("Error al registrar pago");
+          return;
+        }
+
+        await logMesa("TOMO_PAGO", `Tipo: ${tipo}`, nuevoPago.folio, SESSION.casa.id);
+
+        ui.folioText.innerHTML = `
+          <b>Folio asignado al perfil del vecino</b><br>
+          Folio: <b>${nuevoPago.folio}</b>
+        `;
+        show(ui.folioBox);
+        await cargarDatosCasa();
+      } finally {
+        ui.btnPago.disabled = false;
+      }
+    }
+
+    async function actualizarEstatusPago(pagoId, nuevoEstatus){
+      const pago = SESSION.pagos.find((p) => String(p.id) === String(pagoId));
+      if (!pago) return;
+
+      const confirmacion = confirm(`¿Confirmas ${nuevoEstatus === "VALIDADO" ? "aprobar" : "rechazar"} el pago ${pago.folio}?`);
+      if (!confirmacion) return;
+
+      const { error } = await supabase
+        .from("pagos")
+        .update({ estatus: nuevoEstatus })
+        .eq("id", pagoId);
+
+      if (error) {
+        alert("Error al actualizar el pago");
+        return;
+      }
+
+      const accion = nuevoEstatus === "VALIDADO" ? "APROBAR_PAGO" : "RECHAZAR_PAGO";
+      await logMesa(accion, `Tipo: ${pago.tipo}`, pago.folio, pago.casa_id);
+      await cargarDatosCasa();
+    }
+
+    async function bloquearCasa(){
+      if (!SESSION.casa) return;
+      const confirmacion = confirm("¿Seguro que deseas bloquear este WhatsApp?");
+      if (!confirmacion) return;
+
+      const { error } = await supabase
+        .from("casas")
+        .update({ bloqueado: true })
+        .eq("id", SESSION.casa.id);
+
+      if (error) {
+        alert("Error al bloquear WhatsApp");
+        return;
+      }
+
+      await logMesa("BLOQUEAR_WHATSAPP", "Bloqueo manual", null, SESSION.casa.id);
+      await cargarDatosCasa();
+    }
+
+    async function desbloquearCasa(){
+      if (!SESSION.casa) return;
+
+      const { error } = await supabase
+        .from("casas")
+        .update({ bloqueado: false })
+        .eq("id", SESSION.casa.id);
+
+      if (error) {
+        alert("Error al desbloquear WhatsApp");
+        return;
+      }
+
+      await logMesa("DESBLOQUEAR_WHATSAPP", "Desbloqueo manual", null, SESSION.casa.id);
+      await cargarDatosCasa();
+    }
+
+    async function eliminarCasa(){
+      if (!SESSION.casa) return;
+      const confirmacion = confirm("¿Seguro que deseas eliminar este WhatsApp?\nEsto marcará el perfil como eliminado.");
+      if (!confirmacion) return;
+
+      const { error } = await supabase
+        .from("casas")
+        .update({ eliminado: true })
+        .eq("id", SESSION.casa.id);
+
+      if (error) {
+        alert("Error al eliminar WhatsApp");
+        return;
+      }
+
+      await logMesa("ELIMINAR_WHATSAPP", "Eliminación manual", null, SESSION.casa.id);
+      await cargarDatosCasa();
+    }
+
+    async function restaurarCasa(){
+      if (!SESSION.casa) return;
+
+      const { error } = await supabase
+        .from("casas")
+        .update({ eliminado: false })
+        .eq("id", SESSION.casa.id);
+
+      if (error) {
+        alert("Error al restaurar WhatsApp");
+        return;
+      }
+
+      await logMesa("RESTAURAR_WHATSAPP", "Restauración manual", null, SESSION.casa.id);
+      await cargarDatosCasa();
+    }
+
+    async function cargarLogs(){
+      ui.logsEstado.textContent = "Cargando...";
+      ui.logsTable.innerHTML = "";
+
+      const { data, error } = await supabase
+        .from("logs_mesa")
+        .select("*")
+        .order("created_at", { ascending: false })
+        .limit(200);
+
+      if (error) {
+        ui.logsEstado.textContent = "Error al cargar logs";
+        return;
+      }
+
+      if (!data || !data.length) {
+        ui.logsEstado.textContent = "Sin registros";
+        return;
+      }
+
+      ui.logsEstado.textContent = "";
+      const casas = await cargarMapaCasas();
+
+      const accionesEnabled = puedeGestionarLogs();
+      ui.logsTable.innerHTML = data.map((log) => {
+        const casa = log.vecino_id ? casas.get(log.vecino_id) : null;
+        const acciones = accionesEnabled
+          ? `
+            <button class="btn btn-sm btn-outline-primary btn-log-editar" data-id="${log.id}">Editar</button>
+            <button class="btn btn-sm btn-outline-danger btn-log-eliminar" data-id="${log.id}">Eliminar</button>
+          `
+          : "";
+        return `
+          <tr>
+            <td>${new Date(log.created_at).toLocaleString("es-MX")}</td>
+            <td>${log.accion || ""}</td>
+            <td>${log.rol || ""}</td>
+            <td>${log.whatsapp || ""}</td>
+            <td>${casa ? casa.id_unico : ""}</td>
+            <td>${log.folio || ""}</td>
+            <td>${log.detalle || ""}</td>
+            <td>${acciones}</td>
+          </tr>
+        `;
+      }).join("");
+
+      if (accionesEnabled) {
+        ui.logsTable.querySelectorAll(".btn-log-editar").forEach((btn) => {
+          btn.addEventListener("click", () => editarLog(btn.dataset.id));
+        });
+        ui.logsTable.querySelectorAll(".btn-log-eliminar").forEach((btn) => {
+          btn.addEventListener("click", () => eliminarLog(btn.dataset.id));
+        });
+      }
+    }
+
+    async function editarLog(logId){
+      const accion = prompt("Nuevo valor para acción:");
+      if (!accion) return;
+      const detalle = prompt("Nuevo detalle:");
+      if (detalle === null) return;
+
+      const { error } = await supabase
+        .from("logs_mesa")
+        .update({ accion, detalle })
+        .eq("id", logId);
+
+      if (error) {
+        alert("Error al actualizar el log");
+        return;
+      }
+
+      await logMesa("EDITAR_LOG", `Log ${logId}`);
+      await cargarLogs();
+    }
+
+    async function eliminarLog(logId){
+      const confirmacion = confirm("¿Seguro que deseas eliminar este log?");
+      if (!confirmacion) return;
+
+      const { error } = await supabase
+        .from("logs_mesa")
+        .delete()
+        .eq("id", logId);
+
+      if (error) {
+        alert("Error al eliminar el log");
+        return;
+      }
+
+      await logMesa("ELIMINAR_LOG", `Log ${logId}`);
+      await cargarLogs();
+    }
+
+    async function cargarUsuariosMesa(){
+      ui.usuariosTable.innerHTML = "";
+
+      const { data, error } = await supabase
+        .from("usuarios_mesa")
+        .select("id, rol, vecino_id")
+        .order("rol", { ascending: true });
+
+      if (error || !data) {
+        return;
+      }
+
+      const casas = await cargarMapaCasas();
+
+      const accionesEnabled = puedeGestionarUsuarios();
+      ui.usuariosTable.innerHTML = data.map((item) => {
+        const casa = item.vecino_id ? casas.get(item.vecino_id) : null;
+        const nombre = casa ? `${casa.nombre || ""} ${casa.apellido || ""}`.trim() : "";
+        const acciones = accionesEnabled
+          ? `
+            <button class="btn btn-sm btn-outline-primary btn-usuario-editar" data-id="${item.id}">Editar</button>
+            <button class="btn btn-sm btn-outline-danger btn-usuario-eliminar" data-id="${item.id}">Eliminar</button>
+          `
+          : "";
+        return `
+          <tr>
+            <td>${item.rol || ""}</td>
+            <td>${casa ? casa.id_unico : ""}</td>
+            <td>${nombre}</td>
+            <td>${casa ? casa.whatsapp : ""}</td>
+            <td>${acciones}</td>
+          </tr>
+        `;
+      }).join("");
+
+      if (accionesEnabled) {
+        ui.usuariosTable.querySelectorAll(".btn-usuario-editar").forEach((btn) => {
+          btn.addEventListener("click", () => editarUsuarioMesa(btn.dataset.id, casas));
+        });
+        ui.usuariosTable.querySelectorAll(".btn-usuario-eliminar").forEach((btn) => {
+          btn.addEventListener("click", () => eliminarUsuarioMesa(btn.dataset.id));
+        });
+      }
+    }
+
+    async function editarUsuarioMesa(usuarioId, casasMap){
+      const { data, error } = await supabase
+        .from("usuarios_mesa")
+        .select("rol, vecino_id")
+        .eq("id", usuarioId)
+        .maybeSingle();
+
+      if (error || !data) {
+        alert("No se pudo cargar el usuario");
+        return;
+      }
+
+      const rol = prompt("Rol (ADMIN, PRESIDENTE, TESORERO, SECRETARIO):", data.rol || "");
+      if (!rol) return;
+
+      const casaActual = data.vecino_id ? casasMap.get(data.vecino_id) : null;
+      const casaPrompt = prompt("Casa (ID único o UUID):", casaActual ? casaActual.id_unico : "");
+      if (!casaPrompt) return;
+
+      let vecinoId = casaPrompt;
+      const encontrado = Array.from(casasMap.values()).find((casa) => casa.id_unico === casaPrompt);
+      if (encontrado) {
+        vecinoId = encontrado.id;
+      }
+
+      const { error: updateError } = await supabase
+        .from("usuarios_mesa")
+        .update({ rol: rol.toUpperCase(), vecino_id: vecinoId })
+        .eq("id", usuarioId);
+
+      if (updateError) {
+        alert("Error al actualizar el usuario");
+        return;
+      }
+
+      await logMesa("EDITAR_USUARIO", `Usuario ${usuarioId}`, null, vecinoId);
+      await cargarUsuariosMesa();
+    }
+
+    async function eliminarUsuarioMesa(usuarioId){
+      const confirmacion = confirm("¿Seguro que deseas eliminar este usuario de mesa?");
+      if (!confirmacion) return;
+
+      const { error } = await supabase
+        .from("usuarios_mesa")
+        .delete()
+        .eq("id", usuarioId);
+
+      if (error) {
+        alert("Error al eliminar el usuario");
+        return;
+      }
+
+      await logMesa("ELIMINAR_USUARIO", `Usuario ${usuarioId}`);
+      await cargarUsuariosMesa();
+    }
+
+    async function cargarMapaCasas(){
+      const { data, error } = await supabase
+        .from("casas")
+        .select("id,id_unico,nombre,apellido,calle,numero,interior,whatsapp,tenencia,tipo_casa,eliminado")
+        .order("id_unico", { ascending: true });
+
+      if (error) {
+        console.error("Error al cargar casas", error);
+        return new Map();
+      }
+
+      const mapa = new Map();
+      (data || []).forEach((casa) => {
+        mapa.set(casa.id, casa);
+      });
+      return mapa;
+    }
+
+    async function cargarMapaRolesCasa(){
+      const { data } = await supabase
+        .from("logs_mesa")
+        .select("vecino_id, rol, created_at")
+        .order("created_at", { ascending: false });
+
+      const mapa = new Map();
+      (data || []).forEach((log) => {
+        if (!log.vecino_id || mapa.has(log.vecino_id)) return;
+        mapa.set(log.vecino_id, log.rol || "");
+      });
+      return mapa;
+    }
+
+    async function cargarMapaRolesFolio(){
+      const { data } = await supabase
+        .from("logs_mesa")
+        .select("folio, rol, created_at")
+        .order("created_at", { ascending: false });
+
+      const mapa = new Map();
+      (data || []).forEach((log) => {
+        if (!log.folio || mapa.has(log.folio)) return;
+        mapa.set(log.folio, log.rol || "");
+      });
+      return mapa;
+    }
+
+    async function cargarMapaEliminacionesFolio(){
+      const { data } = await supabase
+        .from("logs_mesa")
+        .select("folio, rol, created_at, accion")
+        .eq("accion", "ELIMINAR_PAGO")
+        .order("created_at", { ascending: false });
+
+      const mapa = new Map();
+      (data || []).forEach((log) => {
+        if (!log.folio || mapa.has(log.folio)) return;
+        mapa.set(log.folio, { rol: log.rol || "", fecha: log.created_at });
+      });
+      return mapa;
+    }
+
+    async function cargarReportes(){
+      ui.reportesEstado.textContent = "Cargando...";
+      ui.reporteCasas.innerHTML = "";
+      ui.reporteTransacciones.innerHTML = "";
+      ui.reporteEliminados.innerHTML = "";
+      ui.reporteEliminadosEstado.textContent = "";
+
+      const casasMap = await cargarMapaCasas();
+      const rolesCasa = await cargarMapaRolesCasa();
+      const rolesFolio = await cargarMapaRolesFolio();
+      const eliminacionesFolio = await cargarMapaEliminacionesFolio();
+
+        const { data: pagos, error } = await supabase
+          .from("pagos")
+          .select("*")
+          .order("created_at", { ascending: false });
+
+        if (error) {
+          ui.reportesEstado.textContent = "Error al cargar pagos";
+          return;
+        }
+
+        const pagosActivos = (pagos || []).filter((pago) => pago.estatus !== "ELIMINADO");
+        const pagosEliminados = (pagos || []).filter((pago) => pago.estatus === "ELIMINADO");
+
+        const totales = new Map();
+        pagosActivos.forEach((pago) => {
+          if (!totales.has(pago.casa_id)) {
+            totales.set(pago.casa_id, { validado: 0, pendiente: 0 });
+          }
+          const item = totales.get(pago.casa_id);
+        if (pago.estatus === "VALIDADO") {
+          item.validado += Number(pago.monto || 0);
+        } else {
+          item.pendiente += Number(pago.monto || 0);
+        }
+      });
+
+      const accionesReportes = puedeGestionarReportes();
+      const filasCasas = Array.from(casasMap.values()).map((casa) => {
+        const nombre = `${casa.nombre || ""} ${casa.apellido || ""}`.trim();
+        const direccion = `${casa.calle || ""} ${casa.numero || ""}${casa.interior ? " - " + casa.interior : ""}`.trim();
+        const total = totales.get(casa.id) || { validado: 0, pendiente: 0 };
+        const rolUltimo = rolesCasa.get(casa.id) || "";
+        const acciones = accionesReportes
+          ? `
+            <button class="btn btn-sm btn-outline-primary btn-casa-editar" data-id="${casa.id}">Editar</button>
+            <button class="btn btn-sm btn-outline-danger btn-casa-eliminar" data-id="${casa.id}">Eliminar</button>
+            <button class="btn btn-sm btn-outline-secondary btn-casa-restaurar ${casa.eliminado ? "" : "hidden"}" data-id="${casa.id}">Restaurar</button>
+          `
+          : "";
+        return `
+          <tr>
+            <td>${casa.id_unico}</td>
+            <td>${nombre}</td>
+            <td>${direccion}</td>
+            <td>${casa.whatsapp || ""}</td>
+            <td>${casa.tenencia || ""}</td>
+            <td>${formatearDinero(total.validado)}</td>
+            <td>${formatearDinero(total.pendiente)}</td>
+            <td>${rolUltimo}</td>
+            <td>${acciones}</td>
+          </tr>
+        `;
+      }).join("");
+
+      ui.reporteCasas.innerHTML = filasCasas;
+
+      const accionesTransacciones = puedeGestionarTransacciones();
+          ui.reporteTransacciones.innerHTML = pagosActivos.map((pago) => {
+            const casa = casasMap.get(pago.casa_id);
+            const rolPago = rolesFolio.get(pago.folio) || "";
+          const acciones = accionesTransacciones
+            ? `
+              <button class="btn btn-sm btn-outline-primary btn-pago-editar" data-id="${pago.id}">Editar</button>
+            <button class="btn btn-sm btn-outline-danger btn-pago-eliminar" data-id="${pago.id}">Eliminar</button>
+          `
+          : "";
+        return `
+            <tr>
+              <td>${new Date(pago.created_at).toLocaleString("es-MX")}</td>
+              <td>${casa ? casa.id_unico : ""}</td>
+              <td>${pago.tipo || ""}</td>
+              <td>${pago.mes || ""}</td>
+              <td>${formatearDinero(pago.monto)}</td>
+              <td>${pago.estatus || ""}</td>
+              <td>${pago.folio || ""}</td>
+              <td>${pago.concepto || ""}</td>
+              <td>${rolPago}</td>
+              <td>${acciones}</td>
+            </tr>
+          `;
+        }).join("");
+
+        if (!pagosEliminados.length) {
+          ui.reporteEliminadosEstado.textContent = "Sin transacciones eliminadas";
+        } else {
+          ui.reporteEliminados.innerHTML = pagosEliminados.map((pago) => {
+            const casa = casasMap.get(pago.casa_id);
+            const log = eliminacionesFolio.get(pago.folio);
+            const rol = log ? log.rol : "";
+            const fechaEliminacion = log && log.fecha
+              ? new Date(log.fecha).toLocaleString("es-MX")
+              : "";
+            return `
+              <tr>
+                <td>${new Date(pago.created_at).toLocaleString("es-MX")}</td>
+                <td>${casa ? casa.id_unico : ""}</td>
+                <td>${pago.tipo || ""}</td>
+                <td>${pago.mes || ""}</td>
+                <td>${formatearDinero(pago.monto)}</td>
+                <td>${pago.folio || ""}</td>
+                <td>${pago.concepto || ""}</td>
+                <td>${rol}</td>
+                <td>${fechaEliminacion}</td>
+              </tr>
+            `;
+          }).join("");
+        }
+
+      ui.reportesEstado.textContent = "";
+
+      if (accionesReportes) {
+        ui.reporteCasas.querySelectorAll(".btn-casa-editar").forEach((btn) => {
+          btn.addEventListener("click", () => editarCasaPorId(btn.dataset.id, casasMap));
+        });
+        ui.reporteCasas.querySelectorAll(".btn-casa-eliminar").forEach((btn) => {
+          btn.addEventListener("click", () => eliminarCasaPorId(btn.dataset.id));
+        });
+        ui.reporteCasas.querySelectorAll(".btn-casa-restaurar").forEach((btn) => {
+          btn.addEventListener("click", () => restaurarCasaPorId(btn.dataset.id));
+        });
+      }
+
+      if (accionesTransacciones) {
+        ui.reporteTransacciones.querySelectorAll(".btn-pago-editar").forEach((btn) => {
+          btn.addEventListener("click", () => editarPago(btn.dataset.id));
+        });
+        ui.reporteTransacciones.querySelectorAll(".btn-pago-eliminar").forEach((btn) => {
+          btn.addEventListener("click", () => eliminarPago(btn.dataset.id));
+        });
+      }
+    }
+
+    async function editarCasaPorId(casaId, casasMap){
+      const casa = casasMap.get(casaId);
+      if (!casa) return;
+
+      const nombre = prompt("Nombre:", casa.nombre || "");
+      if (nombre === null) return;
+      const apellido = prompt("Apellido:", casa.apellido || "");
+      if (apellido === null) return;
+      const calle = prompt("Calle:", casa.calle || "");
+      if (calle === null) return;
+      const numero = prompt("Número:", casa.numero || "");
+      if (numero === null) return;
+      const tipoCasa = prompt("Tipo de casa (CASA/DUPLEX):", casa.tipo_casa || "");
+      if (!tipoCasa) return;
+      const interior = prompt("Interior (solo dúplex):", casa.interior || "");
+      if (interior === null) return;
+      const tenencia = prompt("Tenencia (PROPIETARIO/RENTA):", casa.tenencia || "");
+      if (!tenencia) return;
+      const whatsapp = prompt("WhatsApp:", casa.whatsapp || "");
+      if (!whatsapp) return;
+
+      const updates = {
+        nombre,
+        apellido,
+        calle,
+        numero,
+        tipo_casa: tipoCasa.toUpperCase(),
+        interior: tipoCasa.toUpperCase() === "DUPLEX" ? interior : null,
+        tenencia: tenencia.toUpperCase(),
+        whatsapp
+      };
+
+      const { error } = await supabase
+        .from("casas")
+        .update(updates)
+        .eq("id", casaId);
+
+      if (error) {
+        alert("Error al actualizar la casa");
+        return;
+      }
+
+      await logMesa("EDITAR_CASA", `Casa ${casa.id_unico}`, null, casaId);
+      await cargarReportes();
+    }
+
+    async function eliminarCasaPorId(casaId){
+      const confirmacion = confirm("¿Seguro que deseas eliminar este WhatsApp?");
+      if (!confirmacion) return;
+
+      const { error } = await supabase
+        .from("casas")
+        .update({ eliminado: true })
+        .eq("id", casaId);
+
+      if (error) {
+        alert("Error al eliminar la casa");
+        return;
+      }
+
+      await logMesa("ELIMINAR_WHATSAPP", "Eliminación desde reportes", null, casaId);
+      await cargarReportes();
+    }
+
+    async function restaurarCasaPorId(casaId){
+      const { error } = await supabase
+        .from("casas")
+        .update({ eliminado: false })
+        .eq("id", casaId);
+
+      if (error) {
+        alert("Error al restaurar la casa");
+        return;
+      }
+
+      await logMesa("RESTAURAR_WHATSAPP", "Restauración desde reportes", null, casaId);
+      await cargarReportes();
+    }
+
+    async function editarPago(pagoId){
+      const { data, error } = await supabase
+        .from("pagos")
+        .select("*")
+        .eq("id", pagoId)
+        .maybeSingle();
+
+      if (error || !data) {
+        alert("No se pudo cargar el pago");
+        return;
+      }
+
+      const monto = prompt("Monto:", data.monto || "");
+      if (!monto) return;
+      const estatus = prompt("Estatus (PENDIENTE/VALIDADO/RECHAZADO):", data.estatus || "");
+      if (!estatus) return;
+      const folio = prompt("Folio:", data.folio || "");
+      if (!folio) return;
+      const concepto = prompt("Concepto:", data.concepto || "");
+      if (concepto === null) return;
+      const mes = data.tipo === "CUOTA"
+        ? prompt("Mes (solo cuota):", data.mes || "")
+        : data.mes;
+
+      const { error: updateError } = await supabase
+        .from("pagos")
+        .update({
+          monto: Number(monto),
+          estatus: estatus.toUpperCase(),
+          folio,
+          concepto,
+          mes: data.tipo === "CUOTA" ? mes : null
+        })
+        .eq("id", pagoId);
+
+      if (updateError) {
+        alert("Error al actualizar el pago");
+        return;
+      }
+
+      await logMesa("EDITAR_PAGO", `Pago ${folio}`, folio, data.casa_id);
+      await cargarReportes();
+    }
+
+    async function eliminarPago(pagoId){
+      const confirmacion = confirm("¿Seguro que deseas eliminar esta transacción?");
+      if (!confirmacion) return;
+
+      const { data: actualizado, error: updateError } = await supabase
+        .from("pagos")
+        .update({ estatus: "ELIMINADO" })
+        .eq("id", pagoId)
+        .select("id, folio, casa_id")
+        .maybeSingle();
+
+      if (updateError || !actualizado) {
+        console.error("Error al eliminar pago (update)", updateError);
+        alert("No se pudo eliminar el pago. Verifica permisos.");
+        return;
+      }
+
+      await logMesa("ELIMINAR_PAGO", `Pago ${actualizado.folio || pagoId}`, actualizado.folio || null, actualizado.casa_id || null);
+
+      await cargarReportes();
+    }
+
+    async function cargarCasasAdmin(){
+      const { data, error } = await supabase
+        .from("casas")
+        .select("id, id_unico, nombre, apellido")
+        .order("id_unico", { ascending: true });
+
+      if (error) {
+        ui.adminEstado.textContent = "Error al cargar vecinos";
+        return;
+      }
+
+      ui.adminCasa.innerHTML = (data || []).map((c) => {
+        const nombre = `${c.nombre || ""} ${c.apellido || ""}`.trim();
+        return `<option value="${c.id}">${c.id_unico} ${nombre ? "- " + nombre : ""}</option>`;
+      }).join("");
+    }
+
+    async function crearUsuarioMesa(){
+      ui.adminEstado.textContent = "";
+      const rol = ui.adminRol.value;
+      const vecinoId = ui.adminCasa.value;
+
+      if (!rol || !vecinoId) {
+        ui.adminEstado.textContent = "Selecciona rol y vecino";
+        return;
+      }
+
+      ui.btnCrearUsuario.disabled = true;
+
+      try {
+        const { data: existente } = await supabase
+          .from("usuarios_mesa")
+          .select("id")
+          .eq("rol", rol)
+          .eq("vecino_id", vecinoId)
+          .maybeSingle();
+
+        if (existente) {
+          ui.adminEstado.textContent = "El usuario ya existe";
+          return;
+        }
+
+        const { error } = await supabase
+          .from("usuarios_mesa")
+          .insert({
+            rol,
+            vecino_id: vecinoId,
+            perfil_vecino_completo: true
+          });
+
+        if (error) {
+          ui.adminEstado.textContent = "Error al crear usuario";
+          return;
+        }
+
+        ui.adminEstado.textContent = "Usuario creado correctamente";
+        await logMesa("CREAR_USUARIO", `Rol: ${rol}`, null, vecinoId);
+      } finally {
+        ui.btnCrearUsuario.disabled = false;
+      }
+    }
+
+    ui.btnLogout.addEventListener("click", () => {
+      localStorage.removeItem(MESA_SESSION_KEY);
+      window.location.href = "./login.html";
+    });
+
+    ui.btnBuscar.addEventListener("click", buscarCasa);
+    ui.pagoTipo.addEventListener("change", () => {
+      actualizarMesesCuota();
+      validarReglasPago();
+    });
+    ui.pagoMonto.addEventListener("input", actualizarPagoMontoDisplay);
+    ui.btnPago.addEventListener("click", registrarPago);
+    ui.btnFolioOk.addEventListener("click", () => hide(ui.folioBox));
+
+    ui.btnBloquear.addEventListener("click", bloquearCasa);
+    ui.btnDesbloquear.addEventListener("click", desbloquearCasa);
+    ui.btnEliminar.addEventListener("click", eliminarCasa);
+    ui.btnRestaurar.addEventListener("click", restaurarCasa);
+
+    ui.btnLogs.addEventListener("click", () => {
+      show(ui.logsSection);
+      cargarLogs();
+      cargarUsuariosMesa();
+      ui.logsSection.scrollIntoView({ behavior: "smooth" });
+    });
+
+    ui.btnReportes.addEventListener("click", () => {
+      show(ui.reportesSection);
+      cargarReportes();
+      ui.reportesSection.scrollIntoView({ behavior: "smooth" });
+    });
+
+    ui.btnRefrescarLogs.addEventListener("click", cargarLogs);
+    ui.btnRefrescarUsuarios.addEventListener("click", cargarUsuariosMesa);
+    ui.btnRefrescarReportes.addEventListener("click", cargarReportes);
+    ui.btnCrearUsuario.addEventListener("click", crearUsuarioMesa);
+
+    if (cargarSesion()) {
+      if (SESSION.rol === "ADMIN") {
+        cargarCasasAdmin();
+        cargarPerfilAdmin();
+      }
+    }
+  </script>
+  <script>
+    if ("serviceWorker" in navigator) {
+      window.addEventListener("load", () => {
+        navigator.serviceWorker.register("./sw.js");
+      });
+    }
+  </script>
+</body>
+</html>
+
+
