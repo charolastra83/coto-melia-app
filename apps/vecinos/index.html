@@ -843,11 +843,29 @@ async function login(){
   ui.btnLogin.disabled = true;
 
   try {
-    const { data, error } = await supabase
-      .from("casas")
-      .select("*")
-      .eq("whatsapp", whatsapp)
-      .maybeSingle();
+    let data = null;
+    let error = null;
+    const candidatos = [whatsapp];
+
+    if (whatsapp.length === 10) {
+      candidatos.push(`52${whatsapp}`, `+52${whatsapp}`);
+    } else if (whatsapp.length === 12 && whatsapp.startsWith("52")) {
+      candidatos.push(whatsapp.slice(2));
+    } else if (whatsapp.length === 13 && whatsapp.startsWith("52")) {
+      candidatos.push(whatsapp.slice(2));
+    }
+
+    for (const valor of candidatos) {
+      ({ data, error } = await supabase
+        .from("casas")
+        .select("*")
+        .eq("whatsapp", valor)
+        .maybeSingle());
+
+      if (error || data) {
+        break;
+      }
+    }
 
     if (error) {
       console.error("Error al buscar casa", error);
